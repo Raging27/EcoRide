@@ -1,0 +1,23 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  driver: one
+  vehicle: one
+  start_city: MyString
+  end_city: MyString
+  start_time: 2025-02-05 16:48:55
+  end_time: 2025-02-05 16:48:55
+  price: 1
+  seats_available: 1
+  status: MyString
+
+two:
+  driver: two
+  vehicle: two
+  start_city: MyString
+  end_city: MyString
+  start_time: 2025-02-05 16:48:55
+  end_time: 2025-02-05 16:48:55
+  price: 1
+  seats_available: 1
+  status: MyString
