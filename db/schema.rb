@@ -10,9 +10,19 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_02_05_154855) do
+ActiveRecord::Schema[7.2].define(version: 2025_02_05_155430) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "passenger_bookings", force: :cascade do |t|
+    t.bigint "trip_id", null: false
+    t.bigint "passenger_id", null: false
+    t.string "status"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["passenger_id"], name: "index_passenger_bookings_on_passenger_id"
+    t.index ["trip_id"], name: "index_passenger_bookings_on_trip_id"
+  end
 
   create_table "trips", force: :cascade do |t|
     t.bigint "driver_id", null: false
@@ -59,6 +69,8 @@ ActiveRecord::Schema[7.2].define(version: 2025_02_05_154855) do
     t.index ["user_id"], name: "index_vehicles_on_user_id"
   end
 
+  add_foreign_key "passenger_bookings", "trips"
+  add_foreign_key "passenger_bookings", "users", column: "passenger_id"
   add_foreign_key "trips", "users", column: "driver_id"
   add_foreign_key "trips", "vehicles"
   add_foreign_key "vehicles", "users"
