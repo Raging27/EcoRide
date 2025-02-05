@@ -1,0 +1,19 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  user: one
+  plate_number: MyString
+  date_first_registration: 2025-02-05
+  brand: MyString
+  model: MyString
+  color: MyString
+  electric: false
+
+two:
+  user: two
+  plate_number: MyString
+  date_first_registration: 2025-02-05
+  brand: MyString
+  model: MyString
+  color: MyString
+  electric: false
