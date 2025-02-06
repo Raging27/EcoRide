@@ -1,0 +1,11 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  trip: one
+  passenger: one
+  status: MyString
+
+two:
+  trip: two
+  passenger: two
+  status: MyString
