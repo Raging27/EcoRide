@@ -63,12 +63,12 @@ jobs:
           - 5432:5432
         options: --health-cmd="pg_isready" --health-interval=10s --health-timeout=5s --health-retries=3
 
-      mongodb:
+         mongodb:
         image: mongo:8.0.4
         ports:
           - 27017:27017
-        options: --health-cmd="mongosh --eval 'db.runCommand({ ping: 1 })'" --health-interval=10s --health-timeout=5s --health-retries=3
-
+        options: >
+          --health-cmd="mongosh --eval 'db.runCommand({ ping: 1 })'" --health-interval=10s --health-timeout=5s --health-retries=3
 
     steps:
       - name: Install packages
