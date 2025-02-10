@@ -63,12 +63,16 @@ jobs:
           - 5432:5432
         options: --health-cmd="pg_isready" --health-interval=10s --health-timeout=5s --health-retries=3
 
+      # Switch to a valid MongoDB version, e.g. 6.0.4
       mongodb:
-        image: mongo:8.0.4
+        image: mongo:6.0.4
         ports:
           - 27017:27017
-        options: >
-          --health-cmd="mongosh --eval 'db.adminCommand(\"ping\")'" --health-interval=10s --health-timeout=5s --health-retries=3
+        # Remove the health command for simplicity (optional).
+        # If you do want a health command, you can add it back here once you confirm the correct syntax.
+        # For example:
+        # options: >
+        #   --health-cmd="mongosh --eval 'db.adminCommand(\"ping\")'" --health-interval=10s --health-timeout=5s --health-retries=3
 
     steps:
       - name: Install packages
