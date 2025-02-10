@@ -1,0 +1,39 @@
+<h1>New Trip</h1>
+<%= form_with model: @trip, local: true do |form| %>
+  <div>
+    <%= form.label :vehicle_id %><br>
+    <%= form.number_field :vehicle_id %>
+  </div>
+  <div>
+    <%= form.label :start_city %><br>
+    <%= form.text_field :start_city %>
+  </div>
+  <div>
+    <%= form.label :end_city %><br>
+    <%= form.text_field :end_city %>
+  </div>
+  <div>
+    <%= form.label :start_time %><br>
+    <%= form.datetime_select :start_time %>
+  </div>
+  <div>
+    <%= form.label :end_time %><br>
+    <%= form.datetime_select :end_time %>
+  </div>
+  <div>
+    <%= form.label :price %><br>
+    <%= form.number_field :price %>
+  </div>
+  <div>
+    <%= form.label :seats_available %><br>
+    <%= form.number_field :seats_available %>
+  </div>
+  <div>
+    <%= form.label :status %><br>
+    <%= form.text_field :status %>
+  </div>
+  <div>
+    <%= form.submit "Create Trip" %>
+  </div>
+<% end %>
+<%= link_to "Back to Trips", trips_path %>
