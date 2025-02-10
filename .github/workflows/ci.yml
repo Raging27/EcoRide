@@ -51,7 +51,6 @@ jobs:
       - name: Lint code for consistent style
         run: bin/rubocop -f github
 
-
   test:
     runs-on: ubuntu-latest
     services:
@@ -69,7 +68,7 @@ jobs:
         ports:
           - 27017:27017
         options: >
-            --health-cmd="mongosh --eval \"db.runCommand({ ping: 1 })\"" --health-interval=10s --health-timeout=5s --health-retries=3
+          --health-cmd="mongosh --eval 'db.adminCommand(\"ping\")'" --health-interval=10s --health-timeout=5s --health-retries=3
 
     steps:
       - name: Install packages
