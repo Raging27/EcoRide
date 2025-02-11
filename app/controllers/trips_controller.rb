@@ -2,6 +2,26 @@ class TripsController < ApplicationController
   # GET /trips
   def index
     @trips = Trip.all
+
+    # Filter by start city if provided (case-insensitive)
+    if params[:start_city].present?
+      @trips = @trips.where("start_city ILIKE ?", "%#{params[:start_city]}%")
+    end
+
+    # Filter by end city if provided (case-insensitive)
+    if params[:end_city].present?
+      @trips = @trips.where("end_city ILIKE ?", "%#{params[:end_city]}%")
+    end
+
+    # Filter by minimum price if provided
+    if params[:min_price].present?
+      @trips = @trips.where("price >= ?", params[:min_price])
+    end
+
+    # Filter by maximum price if provided
+    if params[:max_price].present?
+      @trips = @trips.where("price <= ?", params[:max_price])
+    end
   end
 
   # GET /trips/:id
