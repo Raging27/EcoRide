@@ -1,9 +1,77 @@
-<h1>Trips</h1>
-<ul>
-  <% @trips.each do |trip| %>
-    <li>
-      <%= link_to "Trip from #{trip.start_city} to #{trip.end_city}", trip_path(trip) %>
-    </li>
-  <% end %>
-</ul>
-<%= link_to "New Trip", new_trip_path %>
+<div class="container mt-5">
+  <!-- Page Title -->
+  <div class="row">
+    <div class="col">
+      <h1 class="mb-4">Trips</h1>
+    </div>
+  </div>
+
+  <!-- Search Form -->
+  <div class="row mb-4">
+    <div class="col">
+      <%= form_with url: trips_path, method: :get, local: true, class: "border p-4 rounded" do |f| %>
+        <div class="row">
+          <div class="col-md-3 mb-3">
+            <%= f.label :start_city, "Start City:" %>
+            <%= f.text_field :start_city, value: params[:start_city], class: "form-control" %>
+          </div>
+          <div class="col-md-3 mb-3">
+            <%= f.label :end_city, "End City:" %>
+            <%= f.text_field :end_city, value: params[:end_city], class: "form-control" %>
+          </div>
+          <div class="col-md-3 mb-3">
+            <%= f.label :min_price, "Min Price:" %>
+            <%= f.number_field :min_price, value: params[:min_price], class: "form-control", step: 1 %>
+          </div>
+          <div class="col-md-3 mb-3">
+            <%= f.label :max_price, "Max Price:" %>
+            <%= f.number_field :max_price, value: params[:max_price], class: "form-control", step: 1 %>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col">
+            <%= f.submit "Search", class: "btn btn-primary" %>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  </div>
+
+  <!-- Trips List -->
+  <div class="row">
+    <% if @trips.any? %>
+      <% @trips.each do |trip| %>
+        <div class="col-md-4 mb-4">
+          <div class="card h-100">
+            <div class="card-header">
+              <strong><%= trip.start_city %> to <%= trip.end_city %></strong>
+            </div>
+            <div class="card-body">
+              <p class="card-text">
+                <strong>Price:</strong> <%= number_to_currency(trip.price) %><br>
+                <strong>Seats Available:</strong> <%= trip.seats_available %><br>
+                <strong>Status:</strong> <%= trip.status %>
+              </p>
+            </div>
+            <div class="card-footer text-center">
+              <%= link_to "View Details", trip_path(trip), class: "btn btn-outline-primary" %>
+            </div>
+          </div>
+        </div>
+      <% end %>
+    <% else %>
+      <div class="col">
+        <div class="alert alert-info" role="alert">
+          No trips found matching your criteria.
+        </div>
+      </div>
+    <% end %>
+  </div>
+
+  <!-- New Trip Button -->
+  <div class="row">
+    <div class="col text-center">
+      <%= link_to "New Trip", new_trip_path, class: "btn btn-success mt-3" %>
+    </div>
+  </div>
+</div>
