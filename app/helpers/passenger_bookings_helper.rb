@@ -1,0 +1,2 @@
+module PassengerBookingsHelper
+end

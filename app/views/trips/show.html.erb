@@ -1,23 +1,16 @@
-<<h1>Trip Details</h1>
-<p>
-  <strong>Start City:</strong> <%= @trip.start_city %>
-</p>
-<p>
-  <strong>End City:</strong> <%= @trip.end_city %>
-</p>
-<p>
-  <strong>Start Time:</strong> <%= @trip.start_time %>
-</p>
-<p>
-  <strong>End Time:</strong> <%= @trip.end_time %>
-</p>
-<p>
-  <strong>Price:</strong> <%= @trip.price %>
-</p>
-<p>
-  <strong>Seats Available:</strong> <%= @trip.seats_available %>
-</p>
-<p>
-  <strong>Status:</strong> <%= @trip.status %>
-</p>
+<h1>Trip Details</h1>
+<p><strong>From:</strong> <%= @trip.start_city %></p>
+<p><strong>To:</strong> <%= @trip.end_city %></p>
+<p><strong>Start Time:</strong> <%= @trip.start_time %></p>
+<p><strong>End Time:</strong> <%= @trip.end_time %></p>
+<p><strong>Price:</strong> <%= @trip.price %></p>
+<p><strong>Seats Available:</strong> <%= @trip.seats_available %></p>
+<p><strong>Status:</strong> <%= @trip.status %></p>
+
+<% if user_signed_in? && current_user.role == "passenger" %>
+  <%= button_to "Book Trip", trip_passenger_bookings_path(@trip), method: :post %>
+<% else %>
+  <%= link_to "Sign in to book", new_user_session_path %>
+<% end %>
+
 <%= link_to "Back to Trips", trips_path %>
