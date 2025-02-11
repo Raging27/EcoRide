@@ -6,9 +6,31 @@
 <p><strong>Price:</strong> <%= @trip.price %></p>
 <p><strong>Seats Available:</strong> <%= @trip.seats_available %></p>
 <p><strong>Status:</strong> <%= @trip.status %></p>
+<p>
+  <strong>Vehicle:</strong>
+  <% if @trip.vehicle.present? %>
+    <%= @trip.vehicle.brand %> <%= @trip.vehicle.model %>
+  <% else %>
+    Not specified
+  <% end %>
+</p>
+<p>
+  <strong>Electric:</strong>
+  <% if @trip.vehicle && @trip.vehicle.electric? %>
+    Yes
+  <% else %>
+    No
+  <% end %>
+</p>
+
 
 <% if user_signed_in? && current_user.role == "passenger" %>
-  <%= button_to "Book Trip", trip_passenger_bookings_path(@trip), method: :post %>
+  <% if current_user.passenger_bookings.exists?(trip_id: @trip.id) %>
+    <% booking = current_user.passenger_bookings.find_by(trip_id: @trip.id) %>
+    <%= button_to "Cancel Booking", passenger_booking_path(booking), method: :delete, data: { confirm: "Are you sure you want to cancel your booking?" } %>
+  <% else %>
+    <%= button_to "Book Trip", trip_passenger_bookings_path(@trip), method: :post %>
+  <% end %>
 <% else %>
   <%= link_to "Sign in to book", new_user_session_path %>
 <% end %>
