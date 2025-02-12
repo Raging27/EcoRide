@@ -1,4 +1,6 @@
 class TripsController < ApplicationController
+  before_action :authenticate_user!
+
   # GET /trips
   def index
     @trips = Trip.all
@@ -31,26 +33,44 @@ class TripsController < ApplicationController
 
   # GET /trips/new
   def new
+    # Ensure only drivers can create trips
+    unless current_user.role == "driver"
+      redirect_to trips_path, alert: "Only drivers can create trips." and return
+    end
+
     @trip = Trip.new
   end
 
   # POST /trips
   def create
+    # Ensure only drivers can create trips
+    unless current_user.role == "driver"
+      redirect_to trips_path, alert: "Only drivers can create trips." and return
+    end
+
+    # Check if the driver has at least 2 credits (platform fee)
+    if current_user.credits < 2
+      redirect_to trips_path, alert: "Insufficient credits to create a trip." and return
+    end
+
     @trip = Trip.new(trip_params)
-    # Assign the current user as the driver; ensure you have user authentication set up
     @trip.driver = current_user
 
-    if @trip.save
-      redirect_to @trip, notice: "Trip was successfully created."
-    else
-      # Renders the 'new' view again with errors
-      render :new, status: :unprocessable_entity
+    # Wrap creation and credit deduction in a transaction
+    ActiveRecord::Base.transaction do
+      if @trip.save
+        current_user.update!(credits: current_user.credits - 2)
+        redirect_to @trip, notice: "Trip was successfully created. 2 credits have been deducted."
+      else
+        render :new, status: :unprocessable_entity
+      end
     end
+  rescue ActiveRecord::RecordInvalid => e
+    render :new, status: :unprocessable_entity, alert: "Trip creation failed: #{e.message}"
   end
 
   private
 
-  # Only allow a list of trusted parameters through.
   def trip_params
     params.require(:trip).permit(:vehicle_id, :start_city, :end_city, :start_time, :end_time, :price, :seats_available, :status)
   end
