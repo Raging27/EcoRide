@@ -12,12 +12,12 @@
     <%= stylesheet_link_tag "application", media: "all", "data-turbo-track": "reload" %>
     <%= javascript_importmap_tags %>
 
-    <!-- Custom Ecological Navbar Styles -->
+    <!-- Custom Styles -->
     <style>
-      /* Custom navbar with an eco-friendly green gradient */
+      /* Ecological navbar with green gradient */
       .navbar-eco {
-        background: linear-gradient(to right, #27ae60, #2ecc71);
-      }
+        background: linear-gradient(to right, rgb(118, 150, 86), rgb(139, 69, 19));
+}
       .navbar-eco .navbar-brand,
       .navbar-eco .nav-link,
       .navbar-eco .navbar-text {
@@ -26,9 +26,19 @@
       .navbar-eco .nav-link:hover {
         color: #dff9fb !important;
       }
+      /* Squared button for user dropdown */
+      .btn-square {
+        width: 40px;
+        height: 40px;
+        padding: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
     </style>
   </head>
-  <body>
+  <!-- Make the body a flex container with a minimum viewport height -->
+  <body class="d-flex flex-column min-vh-100">
     <!-- Ecological Navbar -->
     <nav class="navbar navbar-expand-lg navbar-eco">
       <div class="container">
@@ -43,21 +53,29 @@
           <span class="navbar-toggler-icon"></span>
         </button>
 
-        <!-- Right: User Info -->
+        <!-- Right: User Dropdown Menu -->
         <div class="collapse navbar-collapse justify-content-end" id="navbarEco">
-          <ul class="navbar-nav mb-2 mb-lg-0">
+          <ul class="navbar-nav">
             <% if user_signed_in? %>
-              <li class="nav-item">
-                <span class="navbar-text">
-                  Logged in as: <%= current_user.email %> | Credits: <%= current_user.credits %>
-                </span>
-              </li>
-              <li class="nav-item">
-                <%= button_to "Sign out", destroy_user_session_path, method: :delete, class: "btn btn-link nav-link", form_class: "d-inline" %>
+              <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle btn btn-square btn-outline-light" href="#" id="userMenu" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                  <i class="bi bi-person-fill"></i>
+                </a>
+                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userMenu">
+                  <li>
+                    <span class="dropdown-item-text">
+                      <strong><%= current_user.email %></strong><br>
+                      Credits: <%= current_user.credits %>
+                    </span>
+                  </li>
+                  <li><hr class="dropdown-divider"></li>
+                  <li><%= link_to "My Trips", trips_path, class: "dropdown-item" %></li>
+                  <li><%= link_to "Log out", destroy_user_session_path, method: :delete, class: "dropdown-item" %></li>
+                </ul>
               </li>
             <% else %>
               <li class="nav-item">
-                <%= link_to "Sign in", new_user_session_path, class: "nav-link" %>
+                <%= link_to "Sign in", new_user_session_path, class: "nav-link btn btn-outline-light" %>
               </li>
             <% end %>
           </ul>
@@ -65,10 +83,23 @@
       </div>
     </nav>
 
-    <!-- Main Content -->
-    <div class="container mt-4">
-      <%= yield %>
-    </div>
+    <!-- Main Content: Make it flex-fill so it takes the available space -->
+    <main class="flex-fill">
+      <div class="container mt-4">
+        <%= yield %>
+      </div>
+    </main>
+
+    <!-- Footer: Always sticks to the bottom -->
+    <footer class="bg-light py-3 mt-4 border-top">
+      <div class="container text-center">
+        <p class="mb-0">
+          EcoRide &copy; <%= Time.current.year %> |
+          <a href="/contact" class="text-decoration-none">Contact</a> |
+          <a href="/mentions-legales" class="text-decoration-none">Mentions Légales</a>
+        </p>
+      </div>
+    </footer>
 
     <!-- Bootstrap Bundle JS via CDN (includes Popper) -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
