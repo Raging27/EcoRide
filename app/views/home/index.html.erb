@@ -10,27 +10,19 @@
   </div>
 
   <!-- Search Form -->
-  <div class="row mb-4">
-    <div class="col">
-      <%= form_with url: trips_path, method: :get, local: true, html: { class: "row g-2 align-items-end" } do |f| %>
-        <div class="col-md-4">
-          <%= f.label :start_city, "Ville de départ", class: "form-label" %>
-          <%= f.text_field :start_city, class: "form-control", placeholder: "Ex : Paris" %>
-        </div>
-        <div class="col-md-4">
-          <%= f.label :end_city, "Ville d'arrivée", class: "form-label" %>
-          <%= f.text_field :end_city, class: "form-control", placeholder: "Ex : Lyon" %>
-        </div>
-        <div class="col-md-3">
-          <%= f.label :date, "Date de voyage", class: "form-label" %>
-          <%= f.date_field :date, class: "form-control" %>
-        </div>
-        <div class="col-md-1">
-          <%= f.submit "Rechercher", class: "btn btn-primary" %>
-        </div>
-      <% end %>
-    </div>
+<div class="row mb-4">
+  <div class="col">
+    <%= form_with url: trips_path, method: :get, local: true do |f| %>
+      <div class="input-group">
+        <%= f.text_field :start_city, class: "form-control", placeholder: "Départ", aria: { label: "Ville de départ" } %>
+        <%= f.text_field :end_city, class: "form-control", placeholder: "Destination", aria: { label: "Ville d'arrivée" } %>
+        <%= f.date_field :date, class: "form-control", placeholder: "Date de voyage", aria: { label: "Date de voyage" } %>
+        <button class="btn btn-rechercher" type="submit">Rechercher</button>
+      </div>
+    <% end %>
   </div>
+</div>
+
 
   <!-- Images Grid -->
   <div class="row">
