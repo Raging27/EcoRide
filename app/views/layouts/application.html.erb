@@ -70,7 +70,7 @@
                   </li>
                   <li><hr class="dropdown-divider"></li>
                   <li><%= link_to "My Trips", trips_path, class: "dropdown-item" %></li>
-                  <li><%= link_to "Log out", destroy_user_session_path, method: :delete, class: "dropdown-item" %></li>
+                      <li><%= button_to "Log out", destroy_user_session_path, method: :delete, class: "dropdown-item" %></li>
                 </ul>
               </li>
             <% else %>
