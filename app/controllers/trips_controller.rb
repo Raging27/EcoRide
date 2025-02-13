@@ -24,6 +24,19 @@ class TripsController < ApplicationController
     if params[:max_price].present?
       @trips = @trips.where("price <= ?", params[:max_price])
     end
+
+    # New filter: eco-friendly trips (electric vehicles)
+    if params[:eco_friendly].present? && params[:eco_friendly] == "true"
+      # Make sure to join the vehicles table so we can filter on its attributes
+      @trips = @trips.joins(:vehicle).where(vehicles: { electric: true })
+    end
+
+    # New filter: maximum travel duration (in hours)
+    if params[:max_duration].present?
+      max_duration = params[:max_duration].to_f
+      # Calculate duration in hours: (end_time - start_time) in seconds divided by 3600
+      @trips = @trips.where("EXTRACT(EPOCH FROM (end_time - start_time)) / 3600 <= ?", max_duration)
+    end
   end
 
   # GET /trips/:id
@@ -56,7 +69,6 @@ class TripsController < ApplicationController
     @trip = Trip.new(trip_params)
     @trip.driver = current_user
 
-    # Wrap creation and credit deduction in a transaction
     ActiveRecord::Base.transaction do
       if @trip.save
         current_user.update!(credits: current_user.credits - 2)
