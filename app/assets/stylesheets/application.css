@@ -13,3 +13,29 @@
  *= require_tree .
  *= require_self
  */
+
+body {
+  background-color: #f4f0e3;
+}
+
+/* Custom style for "Rechercher" buttons - darker version */
+.btn-rechercher {
+  background-color: #80cbc4 !important; /* Darker than the previous light teal */
+  border: 1px solid #80cbc4 !important;
+  color: #ffffff !important;
+  font-weight: bold;
+}
+
+.btn-rechercher:hover,
+.btn-rechercher:focus {
+  background-color: #4db6ac !important; /* Even darker on hover */
+  border-color: #4db6ac !important;
+  color: #ffffff !important;
+}
+
+/* Override hover effects for the input group to maintain a consistent look */
+.input-group .form-control:hover,
+.input-group .form-control:focus {
+  border-color: #80cbc4; /* Or any color that suits your design */
+  box-shadow: none;
+}

@@ -1,2 +1,61 @@
-<h1>Home#index</h1>
-<p>Find me in app/views/home/index.html.erb</p>
+<div class="container">
+  <!-- Introduction Section -->
+  <div class="row my-5">
+    <div class="col text-center">
+      <h1 class="display-4">Bienvenue sur EcoRide</h1>
+      <p class="lead">
+        EcoRide est une plateforme de covoiturage écologique qui vous aide à voyager de manière responsable tout en réduisant l'impact environnemental. Rejoignez-nous pour un avenir plus vert.
+      </p>
+    </div>
+  </div>
+
+  <!-- Search Form -->
+<div class="row mb-4">
+  <div class="col">
+    <%= form_with url: trips_path, method: :get, local: true do |f| %>
+      <div class="input-group">
+        <%= f.text_field :start_city, class: "form-control", placeholder: "Départ", aria: { label: "Ville de départ" } %>
+        <%= f.text_field :end_city, class: "form-control", placeholder: "Destination", aria: { label: "Ville d'arrivée" } %>
+        <%= f.date_field :date, class: "form-control", placeholder: "Date de voyage", aria: { label: "Date de voyage" } %>
+        <button class="btn btn-rechercher" type="submit">Rechercher</button>
+      </div>
+    <% end %>
+  </div>
+</div>
+
+
+  <!-- Images Grid -->
+  <div class="row">
+    <div class="col-md-4 mb-3">
+      <img src="<%= asset_path('image1.jpg') %>" alt="Présentation 1" class="img-fluid rounded shadow-sm">
+    </div>
+    <div class="col-md-4 mb-3">
+      <img src="<%= asset_path('image2.jpg') %>" alt="Présentation 2" class="img-fluid rounded shadow-sm">
+    </div>
+    <div class="col-md-4 mb-3">
+      <img src="<%= asset_path('image1.jpg') %>" alt="Présentation 3" class="img-fluid rounded shadow-sm">
+    </div>
+  </div>
+
+  <!-- columns side by side -->
+  <div class="row my-5">
+    <div class="col-md-4">
+      <h3>Voyages durables</h3>
+      <p>
+        Chaque trajet partagé permet de réduire les émissions de CO2. En choisissant EcoRide, vous optez pour un mode de transport qui préserve notre planète et contribue à un avenir plus vert.
+      </p>
+    </div>
+    <div class="col-md-4">
+      <h3>Communauté engagée</h3>
+      <p>
+        Nous cultivons la confiance et la transparence entre nos utilisateurs. Notre communauté est dédiée au partage, à l'entraide et à la promotion de solutions de transport respectueuses de l'environnement.
+      </p>
+    </div>
+    <div class="col-md-4">
+      <h3>Agir pour la planète</h3>
+      <p>
+        Chaque voyage compte ! En covoiturant, vous réduisez votre empreinte carbone et participez activement à la protection de nos ressources naturelles. Ensemble, nous pouvons faire une réelle différence.
+      </p>
+    </div>
+  </div>
+</div>
