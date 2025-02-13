@@ -1,15 +1,46 @@
 <div class="container mt-4">
   <h1 class="mb-4">Voyages Disponibles</h1>
 
+  <!-- Filter Form -->
+  <%= form_with url: trips_path, method: :get, local: true, class: "row g-3 mb-4" do |f| %>
+    <div class="col-md-3">
+      <%= f.label :start_city, "Ville de départ", class: "form-label" %>
+      <%= f.text_field :start_city, value: params[:start_city], class: "form-control" %>
+    </div>
+    <div class="col-md-3">
+      <%= f.label :end_city, "Ville d'arrivée", class: "form-label" %>
+      <%= f.text_field :end_city, value: params[:end_city], class: "form-control" %>
+    </div>
+    <div class="col-md-2">
+      <%= f.label :min_price, "Prix min", class: "form-label" %>
+      <%= f.number_field :min_price, value: params[:min_price], class: "form-control", step: 1 %>
+    </div>
+    <div class="col-md-2">
+      <%= f.label :max_price, "Prix max", class: "form-label" %>
+      <%= f.number_field :max_price, value: params[:max_price], class: "form-control", step: 1 %>
+    </div>
+    <div class="col-md-1">
+      <%= f.label :eco_friendly, "Eco", class: "form-label" %>
+      <div class="form-check">
+        <%= f.check_box :eco_friendly, { checked: params[:eco_friendly].present? && params[:eco_friendly] == "true" }, "true", "false" %>
+      </div>
+    </div>
+    <div class="col-md-1">
+      <%= f.label :max_duration, "Durée max", class: "form-label" %>
+      <%= f.number_field :max_duration, value: params[:max_duration], class: "form-control", step: 1 %>
+    </div>
+    <div class="col-12">
+      <%= f.submit "Rechercher", class: "btn btn-primary" %>
+    </div>
+  <% end %>
+
   <% if @trips.any? %>
     <div class="row">
       <% @trips.each do |trip| %>
         <div class="col-md-4 mb-4">
           <div class="card h-100 shadow-sm">
             <div class="card-body">
-              <h5 class="card-title">
-                <%= trip.start_city %> &rarr; <%= trip.end_city %>
-              </h5>
+              <h5 class="card-title"><%= trip.start_city %> &rarr; <%= trip.end_city %></h5>
               <p class="card-text">
                 <strong>Prix :</strong> <%= number_to_currency(trip.price) %><br>
                 <strong>Places Disponibles :</strong> <%= trip.seats_available %><br>
@@ -22,8 +53,6 @@
       <% end %>
     </div>
   <% else %>
-    <div class="alert alert-info">
-      Aucun voyage trouvé.
-    </div>
+    <div class="alert alert-info">Aucun voyage trouvé.</div>
   <% end %>
 </div>
