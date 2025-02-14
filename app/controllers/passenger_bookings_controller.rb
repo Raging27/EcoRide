@@ -1,35 +1,33 @@
 class PassengerBookingsController < ApplicationController
   before_action :authenticate_user!
 
-  # POST /trips/:trip_id/passenger_bookings
   def create
     @trip = Trip.find(params[:trip_id])
 
-    # Check for available seats
-    if @trip.seats_available <= 0
-      redirect_to trip_path(@trip), alert: "No seats available for this trip." and return
+    if @trip.driver == current_user
+      redirect_to trip_path(@trip), alert: "Les conducteurs ne peuvent pas réserver leur propre voyage." and return
     end
 
-    # Define booking cost (adjust as needed)
+    if @trip.seats_available <= 0
+      redirect_to trip_path(@trip), alert: "Aucune place disponible pour ce voyage." and return
+    end
+
     booking_cost = 1
 
-    # Ensure the current user (passenger) has enough credits
     if current_user.credits < booking_cost
-      redirect_to trip_path(@trip), alert: "You do not have enough credits to book this trip." and return
+      redirect_to trip_path(@trip), alert: "Vous n'avez pas assez de crédits pour réserver ce voyage." and return
     end
 
     ActiveRecord::Base.transaction do
       @booking = PassengerBooking.create!(trip: @trip, passenger: current_user, status: "confirmed")
-
       @trip.update!(seats_available: @trip.seats_available - 1)
-
-      # Deduct the booking cost from the user's credits
       current_user.update!(credits: current_user.credits - booking_cost)
     end
 
-    redirect_to trip_path(@trip), notice: "Successfully booked the trip."
+    redirect_to trip_path(@trip), notice: "Réservation effectuée avec succès. #{booking_cost} crédit a été déduit."
   rescue ActiveRecord::RecordInvalid => e
-    redirect_to trip_path(@trip), alert: "Booking failed: #{e.message}"
+    Rails.logger.error("Erreur lors de la réservation du voyage #{@trip.id}: #{e.message}")
+    redirect_to trip_path(@trip), alert: "Échec de la réservation : #{e.message}"
   end
 
   # DELETE /passenger_bookings/:id
@@ -38,16 +36,14 @@ class PassengerBookingsController < ApplicationController
     @trip = @booking.trip
 
     ActiveRecord::Base.transaction do
-      # Refund the booking cost to the user
       current_user.update!(credits: current_user.credits + 1)
-      # Increment the trip's available seats
       @trip.update!(seats_available: @trip.seats_available + 1)
-      # Remove the booking record
       @booking.destroy!
     end
 
-    redirect_to trip_path(@trip), notice: "Booking canceled."
+    redirect_to trip_path(@trip), notice: "Réservation annulée avec succès."
   rescue ActiveRecord::RecordInvalid => e
-    redirect_to trip_path(@trip), alert: "Cancellation failed: #{e.message}"
+    Rails.logger.error("Erreur lors de l'annulation de la réservation #{@booking.id}: #{e.message}")
+    redirect_to trip_path(@trip), alert: "Échec de l'annulation de la réservation : #{e.message}"
   end
 end
