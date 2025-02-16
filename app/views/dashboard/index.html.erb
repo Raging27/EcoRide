@@ -1,43 +1,37 @@
-<div class="container mt-5">
-  <% if current_user.role == "passenger" %>
-    <h1>Passenger Dashboard</h1>
-    <h2>Your Bookings</h2>
-    <% if @bookings.any? %>
-      <ul class="list-group">
-        <% @bookings.each do |booking| %>
-          <li class="list-group-item d-flex justify-content-between align-items-center">
-            <div>
-              Trip from <strong><%= booking.trip.start_city %></strong> to <strong><%= booking.trip.end_city %></strong> on
-              <%= booking.trip.start_time.strftime("%Y-%m-%d %H:%M") %>
-            </div>
-            <div>
-              <%= button_to "Cancel Booking", passenger_booking_path(booking), method: :delete, data: { confirm: "Are you sure you want to cancel your booking?" }, class: "btn btn-danger btn-sm" %>
-            </div>
-          </li>
+<div class="container mt-4">
+  <h1 class="mb-4">Mon Espace Utilisateur</h1>
+
+  <div class="card mb-4">
+    <div class="card-body">
+      <h3>Bienvenue, <%= current_user.pseudo %>!</h3>
+      <p><strong>Email:</strong> <%= current_user.email %></p>
+      <p><strong>Crédits disponibles:</strong> <%= current_user.credits %></p>
+    </div>
+  </div>
+
+  <% if current_user.role == "driver" %>
+    <h2>Mes Voyages Créés</h2>
+    <% if @driven_trips.any? %>
+      <div class="list-group mb-4">
+        <% @driven_trips.each do |trip| %>
+          <%= link_to "#{trip.start_city} → #{trip.end_city} (#{trip.start_time.strftime("%d/%m/%Y %H:%M")})", trip_path(trip), class: "list-group-item list-group-item-action" %>
         <% end %>
-      </ul>
-    <% else %>
-      <div class="alert alert-info mt-3">
-        You have no bookings at the moment.
       </div>
+    <% else %>
+      <p>Aucun voyage créé.</p>
     <% end %>
-  <% else %>
-    <h1>Driver Dashboard</h1>
-    <h2>Your Trips</h2>
-    <% if @trips.any? %>
-      <ul class="list-group">
-        <% @trips.each do |trip| %>
-          <li class="list-group-item">
-            Trip from <strong><%= trip.start_city %></strong> to <strong><%= trip.end_city %></strong> on
-            <%= trip.start_time.strftime("%Y-%m-%d %H:%M") %>
-            <!-- Optionally, add links to edit or view more details -->
-          </li>
+  <% elsif current_user.role == "passenger" %>
+    <h2>Mes Voyages Réservés</h2>
+    <% if @booked_trips.any? %>
+      <div class="list-group mb-4">
+        <% @booked_trips.each do |trip| %>
+          <%= link_to "#{trip.start_city} → #{trip.end_city} (#{trip.start_time.strftime("%d/%m/%Y %H:%M")})", trip_path(trip), class: "list-group-item list-group-item-action" %>
         <% end %>
-      </ul>
-    <% else %>
-      <div class="alert alert-info mt-3">
-        You haven't created any trips yet.
       </div>
+    <% else %>
+      <p>Aucun voyage réservé.</p>
     <% end %>
   <% end %>
+
+  <%= link_to "Retour à l'accueil", root_path, class: "btn btn-secondary" %>
 </div>
