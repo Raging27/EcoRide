@@ -3,7 +3,7 @@ Rails.application.routes.draw do
 
   get "home/index"
 
-  get "dashboard", to: "dashboard#index"
+  get "dashboard", to: "dashboard#index", as: :dashboard
 
   resources :trips, only: [ :index, :show, :new, :create ] do
     resources :passenger_bookings, only: [ :create ]
