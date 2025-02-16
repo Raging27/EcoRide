@@ -1,19 +1,33 @@
 class Trip < ApplicationRecord
+  # Virtual attribute to decide whether to use an existing vehicle or create a new one
+  attr_accessor :vehicle_option
+
   belongs_to :driver, class_name: "User"
   belongs_to :vehicle
   has_many :passenger_bookings, dependent: :destroy
 
+  # Allow nested attributes for creating a new vehicle
+  accepts_nested_attributes_for :vehicle, reject_if: :all_blank
+
+  # Validations for essential fields
+  validates :start_city, :end_city, :start_time, :end_time, :price, :status, presence: true
+
+  # Validate that seats_available is an integer between 1 and 8
   validates :seats_available, numericality: {
     only_integer: true,
     greater_than_or_equal_to: 1,
     less_than_or_equal_to: 8
   }
 
+  # When a new vehicle is being created, validate its attributes
+  validates_associated :vehicle, if: -> { vehicle_option == "new" }
+
+  # Method to fetch reviews for this trip from MongoDB
   def reviews
     Review.where(trip_id: id)
   end
 
-  # Before destroying trip, delete its reviews from MongoDB.
+  # Callback: before destroying a trip, clean up its reviews from MongoDB
   before_destroy :cleanup_reviews
 
   private
