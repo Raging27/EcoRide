@@ -1,9 +1,15 @@
 Rails.application.routes.draw do
+  get "static_pages/contact"
+  get "static_pages/mentions_legales"
   devise_for :users
 
   get "home/index"
 
   get "dashboard", to: "dashboard#index", as: :dashboard
+
+  get "contact", to: "static_pages#contact"
+  get "mentions-legales", to: "static_pages#mentions_legales"
+
 
   resources :trips, only: [ :index, :show, :new, :create ] do
     resources :passenger_bookings, only: [ :create ]
