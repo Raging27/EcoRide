@@ -29,6 +29,15 @@ class TripsController < ApplicationController
       max_duration = params[:max_duration].to_f
       @trips = @trips.where("EXTRACT(EPOCH FROM (end_time - start_time)) / 3600 <= ?", max_duration)
     end
+
+    if params[:date].present?
+      begin
+        search_date = Date.parse(params[:date])
+        @trips = @trips.where("DATE(start_time) = ?", search_date)
+      rescue ArgumentError
+        flash.now[:alert] = "La date fournie n'est pas valide."
+      end
+    end
   end
 
   # GET /trips/:id
@@ -43,7 +52,7 @@ class TripsController < ApplicationController
     end
 
     @trip = Trip.new
-    # Build nested vehicle for the "new vehicle" option
+    # Build nested vehicle attributes for the "new vehicle" option
     @trip.build_vehicle
   end
 
@@ -57,13 +66,14 @@ class TripsController < ApplicationController
       redirect_to trips_path, alert: "Crédits insuffisants pour créer un voyage." and return
     end
 
+    # Determine which vehicle option was selected
     if params[:trip][:vehicle_option] == "new"
-      # When adding a new vehicle, ignore the vehicle_id parameter
+      # When adding a new vehicle, ignore the vehicle_id parameter.
       @trip = Trip.new(trip_params.except(:vehicle_id))
-      # Assign the new vehicle's user to the current user if a new vehicle is being built
+      # Associate the new vehicle with the current user if present.
       @trip.vehicle.user = current_user if @trip.vehicle.present?
     else
-      # Otherwise, use the existing vehicle and ignore nested vehicle attributes and vehicle_option
+      # Otherwise, use the existing vehicle and ignore nested vehicle attributes and vehicle_option.
       @trip = Trip.new(trip_params.except(:vehicle_attributes, :vehicle_option))
     end
 
