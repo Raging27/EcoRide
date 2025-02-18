@@ -1,14 +1,53 @@
 <div class="container mt-4">
   <h1 class="mb-4">Mon Espace Utilisateur</h1>
 
+  <!-- Profile Section -->
   <div class="card mb-4">
     <div class="card-body">
       <h3>Bienvenue, <%= current_user.pseudo %>!</h3>
-      <p><strong>Email:</strong> <%= current_user.email %></p>
-      <p><strong>Crédits disponibles:</strong> <%= current_user.credits %></p>
+      <p><strong>Email :</strong> <%= current_user.email %></p>
+      <p><strong>Crédits disponibles :</strong> <%= current_user.credits %></p>
+      <%= link_to "Modifier mon profil", edit_user_registration_path, class: "btn btn-primary" %>
     </div>
   </div>
 
+  <!-- Vehicles Section (for drivers) -->
+  <% if current_user.role == "driver" %>
+    <div class="card mb-4">
+      <div class="card-header">
+        <h4>Mes Véhicules</h4>
+      </div>
+      <div class="card-body">
+        <% if @vehicles.any? %>
+          <div class="row">
+            <% @vehicles.each do |vehicle| %>
+              <div class="col-md-4 mb-3">
+                <div class="card h-100">
+                  <div class="card-body">
+                    <h5 class="card-title"><%= vehicle.brand %> <%= vehicle.model %></h5>
+                    <p class="card-text">
+                      <strong>Immatriculation :</strong> <%= vehicle.plate_number %><br>
+                      <strong>Date première immatriculation :</strong> <%= vehicle.date_first_registration.strftime("%d/%m/%Y") %><br>
+                      <strong>Couleur :</strong> <%= vehicle.color %><br>
+                      <strong>Électrique :</strong> <%= vehicle.electric? ? "Oui" : "Non" %>
+                    </p>
+                  </div>
+                  <div class="card-footer">
+                    <%= link_to "Modifier", edit_vehicle_path(vehicle), class: "btn btn-sm btn-warning" %>
+                  </div>
+                </div>
+              </div>
+            <% end %>
+          </div>
+        <% else %>
+          <p>Aucun véhicule enregistré.</p>
+        <% end %>
+        <%= link_to "Ajouter un véhicule", new_vehicle_path, class: "btn btn-success" %>
+      </div>
+    </div>
+  <% end %>
+
+  <!-- Trips Section -->
   <% if current_user.role == "driver" %>
     <h2>Mes Voyages Créés</h2>
     <% if @driven_trips.any? %>
@@ -33,5 +72,7 @@
     <% end %>
   <% end %>
 
-  <%= link_to "Retour à l'accueil", root_path, class: "btn btn-secondary" %>
+  <div class="text-center">
+    <%= link_to "Retour à l'accueil", root_path, class: "btn btn-secondary" %>
+  </div>
 </div>
