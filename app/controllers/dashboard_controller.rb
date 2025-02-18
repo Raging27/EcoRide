@@ -43,7 +43,7 @@ class DashboardController < ApplicationController
 
   def user_dashboard_params
     params.require(:user).permit(
-      :role,
+      # :role, # Removed for security reasons
       vehicles_attributes: [
         :id, :plate_number, :date_first_registration, :brand, :model, :color, :default_seats, :_destroy
       ]
