@@ -1,9 +1,40 @@
-# This file should ensure the existence of records required to run the application in every environment (production,
-# development, test). The code here should be idempotent so that it can be executed at any point in every environment.
-# The data can then be loaded with the bin/rails db:seed command (or created alongside the database with db:setup).
-#
-# Example:
-#
-#   ["Action", "Comedy", "Drama", "Horror"].each do |genre_name|
-#     MovieGenre.find_or_create_by!(name: genre_name)
-#   end
+# db/seeds.rb
+
+# Create Admin User
+User.find_or_create_by!(email: "admin@example.com") do |user|
+  user.password = "password"
+  user.password_confirmation = "password"
+  user.pseudo = "Admin User"
+  user.credits = 20
+  user.role = "admin"
+  user.is_chauffeur = false
+end
+
+# Create Employee User
+User.find_or_create_by!(email: "employee@example.com") do |user|
+  user.password = "password"
+  user.password_confirmation = "password"
+  user.pseudo = "Employee User"
+  user.credits = 20
+  user.role = "employee"
+  user.is_chauffeur = false
+end
+
+# Optionally, add more users if needed
+User.find_or_create_by!(email: "user1@example.com") do |user|
+  user.password = "password"
+  user.password_confirmation = "password"
+  user.pseudo = "User One"
+  user.credits = 20
+  user.role = "driver"
+  user.is_chauffeur = false
+end
+
+User.find_or_create_by!(email: "user2@example.com") do |user|
+  user.password = "password"
+  user.password_confirmation = "password"
+  user.pseudo = "User Two"
+  user.credits = 20
+  user.role = "passenger"
+  user.is_chauffeur = false
+end

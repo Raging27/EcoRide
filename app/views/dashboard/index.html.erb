@@ -4,21 +4,22 @@
   <!-- Profile Section -->
   <div class="card mb-4">
     <div class="card-body">
-      <h3>Bienvenue, <%= current_user.pseudo %>!</h3>
+      <h3 class="card-title">Bienvenue, <%= current_user.pseudo %>!</h3>
       <p><strong>Email :</strong> <%= current_user.email %></p>
       <p><strong>Crédits disponibles :</strong> <%= current_user.credits %></p>
       <%= link_to "Modifier mon profil", edit_user_registration_path, class: "btn btn-primary" %>
     </div>
   </div>
 
-  <!-- Vehicles Section (for drivers) -->
-  <% if current_user.role == "driver" %>
+  <% case current_user.role %>
+  <% when "driver", "both" %>
+    <!-- Vehicles Section for Drivers -->
     <div class="card mb-4">
       <div class="card-header">
         <h4>Mes Véhicules</h4>
       </div>
       <div class="card-body">
-        <% if @vehicles.any? %>
+        <% if @vehicles.present? %>
           <div class="row">
             <% @vehicles.each do |vehicle| %>
               <div class="col-md-4 mb-3">
@@ -27,13 +28,14 @@
                     <h5 class="card-title"><%= vehicle.brand %> <%= vehicle.model %></h5>
                     <p class="card-text">
                       <strong>Immatriculation :</strong> <%= vehicle.plate_number %><br>
-                      <strong>Date première immatriculation :</strong> <%= vehicle.date_first_registration.strftime("%d/%m/%Y") %><br>
+                      <strong>Date de première immatriculation :</strong>
+                      <%= vehicle.date_first_registration.strftime("%d/%m/%Y") %><br>
                       <strong>Couleur :</strong> <%= vehicle.color %><br>
                       <strong>Électrique :</strong> <%= vehicle.electric? ? "Oui" : "Non" %>
                     </p>
                   </div>
                   <div class="card-footer">
-                    <%= link_to "Modifier", edit_vehicle_path(vehicle), class: "btn btn-sm btn-warning" %>
+                    <!-- Optionally add an edit link here if you later allow editing -->
                   </div>
                 </div>
               </div>
@@ -45,12 +47,10 @@
         <%= link_to "Ajouter un véhicule", new_vehicle_path, class: "btn btn-success" %>
       </div>
     </div>
-  <% end %>
 
-  <!-- Trips Section -->
-  <% if current_user.role == "driver" %>
+    <!-- Trips Section for Drivers -->
     <h2>Mes Voyages Créés</h2>
-    <% if @driven_trips.any? %>
+    <% if @driven_trips.present? %>
       <div class="list-group mb-4">
         <% @driven_trips.each do |trip| %>
           <%= link_to "#{trip.start_city} → #{trip.end_city} (#{trip.start_time.strftime("%d/%m/%Y %H:%M")})", trip_path(trip), class: "list-group-item list-group-item-action" %>
@@ -59,9 +59,11 @@
     <% else %>
       <p>Aucun voyage créé.</p>
     <% end %>
-  <% elsif current_user.role == "passenger" %>
+
+  <% when "passenger" %>
+    <!-- Trips Section for Passengers -->
     <h2>Mes Voyages Réservés</h2>
-    <% if @booked_trips.any? %>
+    <% if @booked_trips.present? %>
       <div class="list-group mb-4">
         <% @booked_trips.each do |trip| %>
           <%= link_to "#{trip.start_city} → #{trip.end_city} (#{trip.start_time.strftime("%d/%m/%Y %H:%M")})", trip_path(trip), class: "list-group-item list-group-item-action" %>
@@ -70,6 +72,37 @@
     <% else %>
       <p>Aucun voyage réservé.</p>
     <% end %>
+
+  <% when "employee" %>
+    <!-- Employee Dashboard Section -->
+    <h2>Espace Employé</h2>
+    <% if @pending_reviews.present? %>
+      <div class="list-group mb-4">
+        <% @pending_reviews.each do |review| %>
+          <div class="list-group-item">
+            <strong>ID Voyage:</strong> <%= review.trip_id %> |
+            <strong>Note:</strong> <%= review.rating %> |
+            <strong>Contenu:</strong> <%= review.content %>
+          </div>
+        <% end %>
+      </div>
+    <% else %>
+      <p>Aucun avis en attente.</p>
+    <% end %>
+
+  <% when "admin" %>
+    <!-- Admin Dashboard Section -->
+    <h2>Espace Administrateur</h2>
+    <div class="card mb-4">
+      <div class="card-body">
+        <p><strong>Nombre total de voyages :</strong> <%= @total_trips %></p>
+        <p><strong>Nombre total d'utilisateurs :</strong> <%= @total_users %></p>
+        <p><strong>Total des crédits :</strong> <%= @total_credits %></p>
+      </div>
+    </div>
+
+  <% else %>
+    <p>Aucune donnée à afficher pour votre rôle.</p>
   <% end %>
 
   <div class="text-center">
