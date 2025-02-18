@@ -15,8 +15,8 @@ class User < ApplicationRecord
   # Validations
   validates :pseudo, presence: true
   validates :credits, numericality: { greater_than_or_equal_to: 0 }
-  validates :role, inclusion: { in: %w[driver passenger both],
-    message: "doit être 'driver', 'passenger' ou 'both'" }
+  validates :role, inclusion: { in: %w[driver passenger both employee admin],
+    message: "doit être 'driver', 'passenger', 'both', 'employee' ou 'admin'" }
 
   # Helper method to retrieve trips booked as a passenger
   def booked_trips
