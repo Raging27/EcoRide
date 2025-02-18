@@ -1,0 +1,64 @@
+<div class="container mt-4">
+  <h1 class="mb-4">Modifier Mon Profil</h1>
+
+  <%= form_with model: @user, url: dashboard_path, local: true do |f| %>
+    <div class="mb-3">
+      <%= f.label :role, "Choisissez votre rôle", class: "form-label" %>
+      <%= f.select :role, options_for_select([["Chauffeur", "driver"], ["Passager", "passenger"], ["Les deux", "both"]], @user.role), {}, class: "form-select" %>
+    </div>
+
+    <div id="driver_fields" style="<%= (@user.role == 'driver' || @user.role == 'both') ? '' : 'display:none;' %>">
+      <h3>Informations pour les chauffeurs</h3>
+
+      <%= f.fields_for :vehicles do |v| %>
+        <div class="mb-3">
+          <%= v.label :plate_number, "Immatriculation", class: "form-label" %>
+          <%= v.text_field :plate_number, class: "form-control" %>
+        </div>
+        <div class="mb-3">
+          <%= v.label :date_first_registration, "Date de première immatriculation", class: "form-label" %>
+          <%= v.date_field :date_first_registration, class: "form-control" %>
+        </div>
+        <div class="mb-3">
+          <%= v.label :brand, "Marque", class: "form-label" %>
+          <%= v.text_field :brand, class: "form-control" %>
+        </div>
+        <div class="mb-3">
+          <%= v.label :model, "Modèle", class: "form-label" %>
+          <%= v.text_field :model, class: "form-control" %>
+        </div>
+        <div class="mb-3">
+          <%= v.label :color, "Couleur", class: "form-label" %>
+          <%= v.text_field :color, class: "form-control" %>
+        </div>
+        <div class="mb-3">
+          <%= v.label :default_seats, "Nombre de places disponibles", class: "form-label" %>
+          <%= v.number_field :default_seats, class: "form-control", step: 1, min: 1, max: 8 %>
+        </div>
+      <% end %>
+
+
+    <div>
+      <%= f.submit "Mettre à jour mon profil", class: "btn btn-primary" %>
+    </div>
+  <% end %>
+
+  <div class="mt-3">
+    <%= link_to "Retour au tableau de bord", dashboard_path, class: "btn btn-secondary" %>
+  </div>
+</div>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function(){
+    const roleSelect = document.querySelector('select[name="user[role]"]');
+    const driverFields = document.getElementById("driver_fields");
+
+    roleSelect.addEventListener("change", function(){
+      if (roleSelect.value === "driver" || roleSelect.value === "both") {
+        driverFields.style.display = "";
+      } else {
+        driverFields.style.display = "none";
+      }
+    });
+  });
+</script>
