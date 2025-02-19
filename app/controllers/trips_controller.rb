@@ -52,7 +52,7 @@ class TripsController < ApplicationController
     end
 
     @trip = Trip.new
-    # Build nested vehicle attributes for the "new vehicle" option
+    # Prepare nested vehicle attributes for a new vehicle option
     @trip.build_vehicle
   end
 
@@ -66,14 +66,15 @@ class TripsController < ApplicationController
       redirect_to trips_path, alert: "Crédits insuffisants pour créer un voyage." and return
     end
 
-    # Determine which vehicle option was selected
     if params[:trip][:vehicle_option] == "new"
-      # When adding a new vehicle, ignore the vehicle_id parameter.
+      # When adding a new vehicle, ignore vehicle_id and use the nested vehicle attributes.
       @trip = Trip.new(trip_params.except(:vehicle_id))
-      # Associate the new vehicle with the current user if present.
-      @trip.vehicle.user = current_user if @trip.vehicle.present?
+      if @trip.vehicle.present?
+        # Ensure the new vehicle is associated with the current user.
+        @trip.vehicle.user = current_user
+      end
     else
-      # Otherwise, use the existing vehicle and ignore nested vehicle attributes and vehicle_option.
+      # Use existing vehicle; ignore nested vehicle attributes and the vehicle_option.
       @trip = Trip.new(trip_params.except(:vehicle_attributes, :vehicle_option))
     end
 
