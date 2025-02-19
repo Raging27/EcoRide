@@ -6,7 +6,9 @@
     <div class="card-body">
       <h3 class="card-title">Bienvenue, <%= current_user.pseudo %>!</h3>
       <p><strong>Email :</strong> <%= current_user.email %></p>
-      <p><strong>Crédits disponibles :</strong> <%= current_user.credits %></p>
+      <% unless ["employee", "admin"].include?(current_user.role) %>
+        <p><strong>Crédits disponibles :</strong> <%= current_user.credits %></p>
+      <% end %>
       <%= link_to "Modifier mon profil", edit_user_registration_path, class: "btn btn-primary" %>
     </div>
   </div>
@@ -15,8 +17,8 @@
   <% when "driver", "both" %>
     <!-- Vehicles Section for Drivers -->
     <div class="card mb-4">
-      <div class="card-header">
-        <h4>Mes Véhicules</h4>
+      <div class="card-header bg-light">
+        <h4 class="mb-0">Mes Véhicules</h4>
       </div>
       <div class="card-body">
         <% if @vehicles.present? %>
@@ -28,8 +30,7 @@
                     <h5 class="card-title"><%= vehicle.brand %> <%= vehicle.model %></h5>
                     <p class="card-text">
                       <strong>Immatriculation :</strong> <%= vehicle.plate_number %><br>
-                      <strong>Date de première immatriculation :</strong>
-                      <%= vehicle.date_first_registration.strftime("%d/%m/%Y") %><br>
+                      <strong>Date première immatriculation :</strong> <%= vehicle.date_first_registration.strftime("%d/%m/%Y") %><br>
                       <strong>Couleur :</strong> <%= vehicle.color %><br>
                       <strong>Électrique :</strong> <%= vehicle.electric? ? "Oui" : "Non" %>
                     </p>
@@ -42,9 +43,9 @@
             <% end %>
           </div>
         <% else %>
-          <p>Aucun véhicule enregistré.</p>
+          <p class="text-muted">Aucun véhicule enregistré.</p>
         <% end %>
-        <%= link_to "Ajouter un véhicule", new_vehicle_path, class: "btn btn-success" %>
+        <%= link_to "Ajouter un véhicule", new_vehicle_path, class: "btn btn-success mt-2" %>
       </div>
     </div>
 
@@ -57,7 +58,7 @@
         <% end %>
       </div>
     <% else %>
-      <p>Aucun voyage créé.</p>
+      <p class="text-muted">Aucun voyage créé.</p>
     <% end %>
 
   <% when "passenger" %>
@@ -70,7 +71,7 @@
         <% end %>
       </div>
     <% else %>
-      <p>Aucun voyage réservé.</p>
+      <p class="text-muted">Aucun voyage réservé.</p>
     <% end %>
 
   <% when "employee" %>
@@ -80,14 +81,14 @@
       <div class="list-group mb-4">
         <% @pending_reviews.each do |review| %>
           <div class="list-group-item">
-            <strong>ID Voyage:</strong> <%= review.trip_id %> |
-            <strong>Note:</strong> <%= review.rating %> |
-            <strong>Contenu:</strong> <%= review.content %>
+            <strong>ID Voyage :</strong> <%= review.trip_id %> |
+            <strong>Note :</strong> <%= review.rating %> |
+            <strong>Commentaire :</strong> <%= review.content %>
           </div>
         <% end %>
       </div>
     <% else %>
-      <p>Aucun avis en attente.</p>
+      <p class="text-muted">Aucun avis en attente.</p>
     <% end %>
 
   <% when "admin" %>
@@ -102,7 +103,7 @@
     </div>
 
   <% else %>
-    <p>Aucune donnée à afficher pour votre rôle.</p>
+    <p class="text-muted">Aucune donnée à afficher pour votre rôle.</p>
   <% end %>
 
   <div class="text-center">

@@ -10,13 +10,13 @@
     </div>
     <div class="card-body">
       <div class="row">
-        <!-- Left Column -->
+        <!-- Left Column: Date & Prix -->
         <div class="col-md-6">
           <p><strong>Heure de départ :</strong> <%= @trip.start_time.strftime("%d/%m/%Y %H:%M") %></p>
           <p><strong>Heure d'arrivée :</strong> <%= @trip.end_time.strftime("%d/%m/%Y %H:%M") %></p>
           <p><strong>Prix :</strong> <%= number_to_currency(@trip.price) %></p>
         </div>
-        <!-- Right Column -->
+        <!-- Right Column: Places & Véhicule -->
         <div class="col-md-6">
           <p><strong>Places disponibles :</strong> <%= @trip.seats_available %></p>
           <p><strong>Statut :</strong> <%= @trip.status %></p>
@@ -24,11 +24,7 @@
             <strong>Véhicule :</strong>
             <% if @trip.vehicle.present? %>
               <%= @trip.vehicle.brand %> <%= @trip.vehicle.model %>
-              <% if @trip.vehicle.electric? %>
-                (Électrique)
-              <% else %>
-                (Conventionnel)
-              <% end %>
+              (<%= @trip.vehicle.electric? ? "Électrique" : "Conventionnel" %>)
             <% else %>
               Non spécifié
             <% end %>
@@ -67,7 +63,7 @@
       <% if @trip.reviews.any? %>
         <% @trip.reviews.each do |review| %>
           <div class="mb-3">
-            <p><strong>Note :</strong> <%= review.rating %>/5</p>
+            <p><strong>Note :</strong> <%= review.rating %> / 5</p>
             <p><strong>Commentaire :</strong> <%= review.content %></p>
           </div>
           <hr>

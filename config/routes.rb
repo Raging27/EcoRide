@@ -16,6 +16,10 @@ Rails.application.routes.draw do
 
   # Trips and nested Passenger Bookings
   resources :trips, only: [ :index, :show, :new, :create ] do
+    member do
+      patch "start"
+      patch "finish"
+    end
     resources :passenger_bookings, only: [ :create ]
   end
 
