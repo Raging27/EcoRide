@@ -1,5 +1,6 @@
 class TripsController < ApplicationController
   before_action :authenticate_user!
+  before_action :set_trip, only: [ :show, :start, :finish ]
 
   # GET /trips
   def index
@@ -42,7 +43,7 @@ class TripsController < ApplicationController
 
   # GET /trips/:id
   def show
-    @trip = Trip.find(params[:id])
+    # @trip is set in the before_action
   end
 
   # GET /trips/new
@@ -67,14 +68,14 @@ class TripsController < ApplicationController
     end
 
     if params[:trip][:vehicle_option] == "new"
-      # When adding a new vehicle, ignore vehicle_id and use the nested vehicle attributes.
+      # When adding a new vehicle, ignore the vehicle_id and use nested vehicle attributes.
       @trip = Trip.new(trip_params.except(:vehicle_id))
       if @trip.vehicle.present?
-        # Ensure the new vehicle is associated with the current user.
+        # Associate the new vehicle with the current user.
         @trip.vehicle.user = current_user
       end
     else
-      # Use existing vehicle; ignore nested vehicle attributes and the vehicle_option.
+      # Use the existing vehicle; ignore nested vehicle attributes and the vehicle_option.
       @trip = Trip.new(trip_params.except(:vehicle_attributes, :vehicle_option))
     end
 
@@ -93,7 +94,37 @@ class TripsController < ApplicationController
     render :new, status: :unprocessable_entity, alert: "La création du voyage a échoué : #{e.message}"
   end
 
+  # PATCH /trips/:id/start
+  def start
+    if @trip.driver == current_user
+      if @trip.update(status: "in_progress")
+        redirect_to @trip, notice: "Voyage démarré avec succès."
+      else
+        redirect_to @trip, alert: "Impossible de démarrer le voyage."
+      end
+    else
+      redirect_to @trip, alert: "Vous n'êtes pas autorisé à démarrer ce voyage."
+    end
+  end
+
+  # PATCH /trips/:id/finish
+  def finish
+    if @trip.driver == current_user
+      if @trip.update(status: "finished")
+        redirect_to @trip, notice: "Voyage terminé avec succès."
+      else
+        redirect_to @trip, alert: "Impossible de terminer le voyage."
+      end
+    else
+      redirect_to @trip, alert: "Vous n'êtes pas autorisé à terminer ce voyage."
+    end
+  end
+
   private
+
+  def set_trip
+    @trip = Trip.find(params[:id])
+  end
 
   def trip_params
     permitted = [
