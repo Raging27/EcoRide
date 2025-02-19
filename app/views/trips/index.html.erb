@@ -55,4 +55,10 @@
   <% else %>
     <div class="alert alert-info">Aucun voyage trouvé.</div>
   <% end %>
+  <% if user_signed_in? && current_user.role.in?(["driver", "both"]) %>
+  <div class="mb-4 text-center">
+    <%= link_to "Créer un nouveau voyage", new_trip_path, class: "btn btn-success" %>
+  </div>
+<% end %>
+
 </div>
