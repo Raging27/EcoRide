@@ -33,7 +33,7 @@
       </div>
     </div>
 
-    <!-- Driver Actions: Conditional Start/Finish Trip -->
+    <!-- Driver Actions: Start/Finish Trip -->
     <% if user_signed_in? && current_user.role.in?(["driver", "both"]) && current_user == @trip.driver %>
       <div class="card-footer text-center">
         <% if @trip.status == "planned" %>
@@ -44,24 +44,13 @@
       </div>
     <% end %>
 
-    <!-- Booking Actions (for Passengers) -->
-    <% if user_signed_in? && current_user.role == "passenger" %>
-      <div class="card-footer text-center">
-        <% if @trip.seats_available > 0 %>
-          <% if current_user.passenger_bookings.exists?(trip_id: @trip.id) %>
-            <% booking = current_user.passenger_bookings.find_by(trip_id: @trip.id) %>
-            <%= button_to "Annuler la réservation", passenger_booking_path(booking),
-                method: :delete,
-                data: { confirm: "Êtes-vous sûr de vouloir annuler votre réservation ?" },
-                class: "btn btn-warning" %>
-          <% else %>
-            <%= button_to "Réserver ce voyage", trip_passenger_bookings_path(@trip),
-                method: :post, class: "btn btn-success" %>
-          <% end %>
-        <% else %>
-          <div class="alert alert-warning mb-0">Aucune place disponible</div>
-        <% end %>
-      </div>
+    <!-- In-App Review Button for Passengers -->
+    <% if user_signed_in? && current_user.role == "passenger" && @trip.status == "finished" %>
+      <% unless @trip.reviews.where(passenger_id: current_user.id).exists? %>
+        <div class="card-footer text-center">
+          <%= link_to "Écrire un avis", new_trip_review_path(@trip), class: "btn btn-info" %>
+        </div>
+      <% end %>
     <% end %>
   </div>
 
