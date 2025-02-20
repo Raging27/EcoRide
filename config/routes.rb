@@ -14,13 +14,14 @@ Rails.application.routes.draw do
   get "dashboard/edit", to: "dashboard#edit", as: :edit_dashboard
   patch "dashboard", to: "dashboard#update"
 
-  # Trips and nested Passenger Bookings
+  # Trips and nested Passenger Bookings and Reviews
   resources :trips, only: [ :index, :show, :new, :create ] do
     member do
       patch "start"
       patch "finish"
     end
     resources :passenger_bookings, only: [ :create ]
+    resources :reviews, only: [ :new, :create ]
   end
 
   # Passenger Bookings (for deletion)

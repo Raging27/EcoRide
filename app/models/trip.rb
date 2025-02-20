@@ -1,5 +1,4 @@
 class Trip < ApplicationRecord
-  # Virtual attribute to decide whether to use an existing vehicle or create a new one
   attr_accessor :vehicle_option
 
   belongs_to :driver, class_name: "User"
@@ -12,17 +11,13 @@ class Trip < ApplicationRecord
   # Validations for essential fields
   validates :start_city, :end_city, :start_time, :end_time, :price, :status, presence: true
 
-  # Validate that seats_available is an integer between 1 and 8
-  validates :seats_available, numericality: {
-    only_integer: true,
-    greater_than_or_equal_to: 1,
-    less_than_or_equal_to: 8
-  }
+  validates :seats_available, numericality: { only_integer: true,
+                                                greater_than_or_equal_to: 1,
+                                                less_than_or_equal_to: 8 }
 
-  # When a new vehicle is being created, validate its attributes
   validates_associated :vehicle, if: -> { vehicle_option == "new" }
 
-  # Method to fetch reviews for this trip from MongoDB
+  # Manually fetch reviews from MongoDB
   def reviews
     Review.where(trip_id: id)
   end
@@ -33,6 +28,6 @@ class Trip < ApplicationRecord
   private
 
   def cleanup_reviews
-    Review.where(trip_id: id).delete_all
+    reviews.delete_all
   end
 end
