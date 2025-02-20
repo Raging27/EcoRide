@@ -124,5 +124,3 @@ Pusher vers la branche
 
 Ouvrir une Pull Request
 
-📄 Licence
-MIT License
