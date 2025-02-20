@@ -36,7 +36,7 @@
                     </p>
                   </div>
                   <div class="card-footer">
-                    <!-- Optionally add an edit link here if you later allow editing -->
+                    <!-- Optionally add an edit link here if editing becomes allowed -->
                   </div>
                 </div>
               </div>
@@ -92,15 +92,47 @@
     <% end %>
 
   <% when "admin" %>
-    <!-- Admin Dashboard Section -->
-    <h2>Espace Administrateur</h2>
-    <div class="card mb-4">
-      <div class="card-body">
-        <p><strong>Nombre total de voyages :</strong> <%= @total_trips %></p>
-        <p><strong>Nombre total d'utilisateurs :</strong> <%= @total_users %></p>
-        <p><strong>Total des crédits :</strong> <%= @total_credits %></p>
-      </div>
+  <!-- Admin Dashboard Section -->
+  <h2>Espace Administrateur</h2>
+  <div class="card mb-4">
+    <div class="card-body">
+      <p><strong>Nombre total de voyages :</strong> <%= @total_trips %></p>
+      <p><strong>Nombre total d'utilisateurs :</strong> <%= @total_users %></p>
+      <p><strong>Total des crédits :</strong> <%= @total_credits %></p>
     </div>
+  </div>
+  <h3>Gestion des comptes utilisateurs</h3>
+  <% if @users.present? %>
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>Pseudo</th>
+          <th>Email</th>
+          <th>Rôle</th>
+          <th>Crédits</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @users.each do |user| %>
+          <tr>
+            <td><%= user.pseudo %></td>
+            <td><%= user.email %></td>
+            <td><%= user.role %></td>
+            <td><%= user.credits %></td>
+            <td>
+              <% unless user == current_user %>
+                <%= button_to "Suspendre", suspend_user_path(user), method: :patch, data: { confirm: "Êtes-vous sûr de vouloir suspendre ce compte ?" }, class: "btn btn-warning btn-sm" %>
+                <%= button_to "Supprimer", user_path(user), method: :delete, data: { confirm: "Êtes-vous sûr de vouloir supprimer ce compte ?" }, class: "btn btn-danger btn-sm" %>
+              <% end %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  <% else %>
+    <p class="text-muted">Aucun utilisateur trouvé.</p>
+  <% end %>
 
   <% else %>
     <p class="text-muted">Aucune donnée à afficher pour votre rôle.</p>

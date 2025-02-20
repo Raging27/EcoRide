@@ -16,15 +16,12 @@ class DashboardController < ApplicationController
       @driven_trips = current_user.driven_trips.order(start_time: :asc)
       @booked_trips = current_user.passenger_bookings.includes(:trip).map(&:trip)
     when "employee"
-      # For employees, load data such as pending reviews or issues
       @pending_reviews = Review.where(status: "pending")
-      # You could also load trips flagged for review or issues, if applicable
     when "admin"
-      # For administrators, load system-wide metrics
       @total_trips = Trip.count
       @total_users = User.count
       @total_credits = User.sum(:credits)
-      # Additional admin metrics can be added here
+      @users = User.all
     else
       @vehicles = []
       @driven_trips = []
@@ -34,7 +31,7 @@ class DashboardController < ApplicationController
 
   def edit
     @user = current_user
-    # Only allow drivers or users choosing "both" to edit vehicle information.
+    # Allow drivers or those choosing "both" to manage vehicle info.
     if ([ "driver", "both" ].include?(@user.role)) && @user.vehicles.empty?
       @user.vehicles.build
     end
@@ -52,7 +49,7 @@ class DashboardController < ApplicationController
   private
 
   def user_dashboard_params
-    # For security reasons, we are not allowing direct changes to the role via the dashboard.
+    # For security reasons, we’re not allowing direct changes to the role via the dashboard.
     params.require(:user).permit(
       vehicles_attributes: [
         :id, :plate_number, :date_first_registration, :brand, :model, :color, :default_seats, :_destroy
