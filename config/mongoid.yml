@@ -288,7 +288,7 @@ development:
 test:
   clients:
     default:
-      uri: uri: "mongodb+srv://dbNewUser:AJyMHdVBwtDLIWVh@cluster0.5vclugw.mongodb.net/eco_ride_testing?retryWrites=true&w=majority&appName=Cluster0&authSource=admin"
+      uri: "mongodb+srv://dbNewUser:AJyMHdVBwtDLIWVh@cluster0.5vclugw.mongodb.net/eco_ride_testing?retryWrites=true&w=majority&appName=Cluster0&authSource=admin"
       options:
         read:
           mode: :primary
@@ -297,7 +297,7 @@ test:
 production:
   clients:
     default:
-      uri: uri: "mongodb+srv://dbNewUser:AJyMHdVBwtDLIWVh@cluster0.5vclugw.mongodb.net/eco_ride_production?retryWrites=true&w=majority&appName=Cluster0&authSource=admin"
+      uri: "mongodb+srv://dbNewUser:AJyMHdVBwtDLIWVh@cluster0.5vclugw.mongodb.net/eco_ride_production?retryWrites=true&w=majority&appName=Cluster0&authSource=admin"
       options:
         read:
           mode: :primary
