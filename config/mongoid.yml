@@ -4,7 +4,7 @@ development:
     # Defines the default client. (required)
     default:
       # Mongoid can connect to a URI accepted by the driver:
-      uri: <%= ENV['MONGODB_URI'] || 'mongodb://localhost:27017/eco_ride_development' %>
+      uri: "mongodb+srv://dbNewUser:AJyMHdVBwtDLIWVh@cluster0.5vclugw.mongodb.net/eco_ride_development?retryWrites=true&w=majority&appName=Cluster0&authSource=admin"
 
       # Otherwise define the parameters separately.
       # This defines the name of the default database that Mongoid can connect to.
@@ -288,7 +288,7 @@ development:
 test:
   clients:
     default:
-      uri: <%= ENV['MONGODB_URI'] || 'mongodb://localhost:27017/eco_ride_test' %>
+      uri: uri: "mongodb+srv://dbNewUser:AJyMHdVBwtDLIWVh@cluster0.5vclugw.mongodb.net/eco_ride_testing?retryWrites=true&w=majority&appName=Cluster0&authSource=admin"
       options:
         read:
           mode: :primary
@@ -297,7 +297,7 @@ test:
 production:
   clients:
     default:
-      uri: <%= ENV['MONGODB_URI'] %>
+      uri: uri: "mongodb+srv://dbNewUser:AJyMHdVBwtDLIWVh@cluster0.5vclugw.mongodb.net/eco_ride_production?retryWrites=true&w=majority&appName=Cluster0&authSource=admin"
       options:
         read:
           mode: :primary
