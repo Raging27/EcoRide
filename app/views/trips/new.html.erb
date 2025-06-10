@@ -78,12 +78,12 @@
 
     <div class="mb-3">
       <%= f.label :start_time, "Heure de départ", class: "form-label" %>
-      <%= f.datetime_select :start_time, { default: Time.now + 1.day }, { class: "form-control" } %>
+      <%= f.datetime_field :start_time, class: "form-control", value: (Time.now + 1.day).strftime("%Y-%m-%dT%H:%M") %>
     </div>
 
     <div class="mb-3">
       <%= f.label :end_time, "Heure d'arrivée", class: "form-label" %>
-      <%= f.datetime_select :end_time, { default: Time.now + 1.day + 2.hours }, { class: "form-control" } %>
+      <%= f.datetime_field :end_time, class: "form-control", value: (Time.now + 1.day + 2.hours).strftime("%Y-%m-%dT%H:%M") %>
     </div>
 
     <div class="mb-3">
