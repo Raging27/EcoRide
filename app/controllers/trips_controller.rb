@@ -48,7 +48,7 @@ class TripsController < ApplicationController
 
   # GET /trips/new
   def new
-    unless current_user.role == "driver"
+    unless current_user.role == "driver" || current_user.role == "both"
       redirect_to trips_path, alert: "Seuls les conducteurs peuvent créer des voyages." and return
     end
 
@@ -59,7 +59,7 @@ class TripsController < ApplicationController
 
   # POST /trips
   def create
-    unless current_user.role == "driver"
+    unless current_user.role == "driver" || current_user.role == "both"
       redirect_to trips_path, alert: "Seuls les conducteurs peuvent créer des voyages." and return
     end
 

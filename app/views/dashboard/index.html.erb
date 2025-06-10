@@ -30,7 +30,7 @@
                     <h5 class="card-title"><%= vehicle.brand %> <%= vehicle.model %></h5>
                     <p class="card-text">
                       <strong>Immatriculation :</strong> <%= vehicle.plate_number %><br>
-                      <strong>Date première immatriculation :</strong> <%= vehicle.date_first_registration.strftime("%d/%m/%Y") %><br>
+                      <strong>Date première immatriculation :</strong> <%= vehicle.date_first_registration&.strftime("%d/%m/%Y") %><br>
                       <strong>Couleur :</strong> <%= vehicle.color %><br>
                       <strong>Électrique :</strong> <%= vehicle.electric? ? "Oui" : "Non" %>
                     </p>

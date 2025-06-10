@@ -27,7 +27,7 @@ class VehiclesController < ApplicationController
 
   # Ensure that the current user is a driver.
   def ensure_driver!
-    unless current_user.role == "driver"
+    unless current_user.role == "driver" || current_user.role == "both"
       redirect_to root_path, alert: "Only drivers can manage vehicles."
     end
   end

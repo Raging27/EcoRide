@@ -1,0 +1,18 @@
+<% if flash.present? %>
+  <div id="toast-container" class="position-fixed z-3 end-0 d-flex flex-column gap-3 p-3" style="top: 50px;">
+    <% flash.each do |flash_type, message| %>
+      <div data-controller="toast" class="toast-element d-flex align-items-center w-100 bg-white shadow-sm rounded p-3" style="max-width: 24rem;" role="alert">
+        <div class="d-inline-flex align-items-center justify-content-center flex-shrink-0 rounded-circle p-2 <%= flash_type == 'notice' ? 'text-success bg-success bg-opacity-10' : 'text-danger bg-danger bg-opacity-10' %>" style="width: 32px; height: 32px;">
+          <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+            <path d="<%= flash_type == 'notice' ? 'M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5Zm3.707 8.207-4 4a1 1 0 0 1-1.414 0l-2-2a1 1 0 0 1 1.414-1.414L9 10.586l3.293-3.293a1 1 0 0 1 1.414 1.414Z' : 'M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5Zm3.707 11.793a1 1 0 1 1-1.414 1.414L10 11.414l-2.293 2.293a1 1 0 0 1-1.414-1.414L8.586 10 6.293 7.707a1 1 0 0 1 1.414-1.414L10 8.586l2.293-2.293a1 1 0 0 1 1.414 1.414L11.414 10l2.293 2.293Z' %>"/>
+          </svg>
+          <span class="visually-hidden"><%= flash_type == 'notice' ? 'Check' : 'Error' %> icon</span>
+        </div>
+        <div class="ms-3 small fw-normal"><%= j message %></div>
+        <button type="button" class="ms-auto btn-close" data-action="toast#removeToast" aria-label="Close">
+          <span class="visually-hidden">Close</span>
+        </button>
+      </div>
+    <% end %>
+  </div>
+<% end %>

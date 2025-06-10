@@ -333,6 +333,7 @@ DEPENDENCIES
   devise
   importmap-rails
   jbuilder
+  mongo (~> 2)
   mongoid
   pg (~> 1.1)
   puma (>= 5.0)
