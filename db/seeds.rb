@@ -2,8 +2,8 @@
 
 # Create Admin User
 User.find_or_create_by!(email: "admin@example.com") do |user|
-  user.password = "password"
-  user.password_confirmation = "password"
+  user.password = "Password123@"
+  user.password_confirmation = "Password123@"
   user.pseudo = "Admin User"
   user.credits = 20
   user.role = "admin"
@@ -12,8 +12,8 @@ end
 
 # Create Employee User
 User.find_or_create_by!(email: "employee@example.com") do |user|
-  user.password = "password"
-  user.password_confirmation = "password"
+  user.password = "Password123@"
+  user.password_confirmation = "Password123@"
   user.pseudo = "Employee User"
   user.credits = 20
   user.role = "employee"
@@ -22,8 +22,8 @@ end
 
 # Optionally, add more users if needed
 User.find_or_create_by!(email: "user1@example.com") do |user|
-  user.password = "password"
-  user.password_confirmation = "password"
+  user.password = "Password123@"
+  user.password_confirmation = "Password123@"
   user.pseudo = "User One"
   user.credits = 20
   user.role = "driver"
@@ -31,8 +31,8 @@ User.find_or_create_by!(email: "user1@example.com") do |user|
 end
 
 User.find_or_create_by!(email: "user2@example.com") do |user|
-  user.password = "password"
-  user.password_confirmation = "password"
+  user.password = "Password123@"
+  user.password_confirmation = "Password123@"
   user.pseudo = "User Two"
   user.credits = 20
   user.role = "passenger"
