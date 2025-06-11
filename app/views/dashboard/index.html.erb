@@ -76,20 +76,48 @@
 
   <% when "employee" %>
     <!-- Employee Dashboard Section -->
-    <h2>Espace Employé</h2>
-    <% if @pending_reviews.present? %>
-      <div class="list-group mb-4">
-        <% @pending_reviews.each do |review| %>
-          <div class="list-group-item">
-            <strong>ID Voyage :</strong> <%= review.trip_id %> |
-            <strong>Note :</strong> <%= review.rating %> |
-            <strong>Commentaire :</strong> <%= review.content %>
+    <div class="card mb-4">
+      <div class="card-header bg-light">
+        <h2 class="h4 mb-0">Espace Employé</h2>
+      </div>
+      <div class="card-body">
+        <% if @pending_reviews.present? %>
+          <div class="table-responsive">
+            <table class="table table-hover">
+              <thead>
+                <tr>
+                  <th>ID Avis</th>
+                  <th>ID Voyage</th>
+                  <th>Note</th>
+                  <th>Commentaire</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                <% @pending_reviews.each do |review| %>
+                  <tr>
+                    <td>#<%= review.id %></td>
+                    <td><%= review.trip_id %></td>
+                    <td><span class="badge bg-primary"><%= review.rating %>/5</span></td>
+                    <td><small class="text-muted"><%= review.content %></small></td>
+                    <td>
+                      <div class="btn-group gap-2">
+                        <%= button_to "Approuver", approve_trip_review_path(review.trip_id, review), method: :patch, class: "btn btn-success btn-sm" %>
+                        <%= button_to "Rejeter", reject_trip_review_path(review.trip_id, review), method: :patch, class: "btn btn-danger btn-sm" %>
+                      </div>
+                    </td>
+                  </tr>
+                <% end %>
+              </tbody>
+            </table>
+          </div>
+        <% else %>
+          <div class="alert alert-info">
+            <i class="fas fa-info-circle me-2"></i>Aucun avis en attente.
           </div>
         <% end %>
       </div>
-    <% else %>
-      <p class="text-muted">Aucun avis en attente.</p>
-    <% end %>
+    </div>
 
   <% when "admin" %>
   <!-- Admin Dashboard Section -->

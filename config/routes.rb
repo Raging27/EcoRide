@@ -21,7 +21,12 @@ Rails.application.routes.draw do
       patch "finish"
     end
     resources :passenger_bookings, only: [ :create ]
-    resources :reviews, only: [ :new, :create ]
+    resources :reviews, only: [ :new, :create ] do
+      member do
+        patch "approve"
+        patch "reject"
+      end
+    end
   end
 
   # Passenger Bookings (for deletion)

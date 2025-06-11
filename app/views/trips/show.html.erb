@@ -60,8 +60,8 @@
       <h4 class="mb-0">Avis du conducteur</h4>
     </div>
     <div class="card-body">
-      <% if @trip.reviews.any? %>
-        <% @trip.reviews.each do |review| %>
+      <% if @trip.reviews.where(status: "approved").any? %>
+        <% @trip.reviews.where(status: "approved").each do |review| %>
           <div class="mb-3">
             <p><strong>Note :</strong> <%= review.rating %> / 5</p>
             <p><strong>Commentaire :</strong> <%= review.content %></p>
