@@ -86,8 +86,6 @@
             <table class="table table-hover">
               <thead>
                 <tr>
-                  <th>ID Avis</th>
-                  <th>ID Voyage</th>
                   <th>Note</th>
                   <th>Commentaire</th>
                   <th>Actions</th>
@@ -96,8 +94,6 @@
               <tbody>
                 <% @pending_reviews.each do |review| %>
                   <tr>
-                    <td>#<%= review.id %></td>
-                    <td><%= review.trip_id %></td>
                     <td><span class="badge bg-primary"><%= review.rating %>/5</span></td>
                     <td><small class="text-muted"><%= review.content %></small></td>
                     <td>
