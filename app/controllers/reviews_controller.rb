@@ -16,7 +16,7 @@ class ReviewsController < ApplicationController
     @review.driver_id = @trip.driver_id
 
     if @review.save
-      redirect_to trip_path(@trip), notice: "Avis soumis avec succès, en attente de validation."
+      redirect_to trip_path(@trip), notice: "Votre avis a été soumis avec succès. Il sera affiché après approbation par notre équipe."
     else
       render :new, status: :unprocessable_entity
     end
