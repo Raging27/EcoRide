@@ -109,10 +109,10 @@ Base de données : PostgreSQL 15
 
 🔑 Identifiants de test
 Rôle	Email	Mot de passe
-Admin	admin@example.com	password
-Employé	employee@example.com	password
-Conducteur	user1@example.com	password
-Passager	user2@example.com	password
+Admin	admin@example.com	Password123@
+Employé	employee@example.com	Password123@
+Conducteur	user1@example.com	Password123@
+Passager	user2@example.com	Password123@
 🤝 Contribuer
 Forker le projet
 
