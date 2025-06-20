@@ -33,7 +33,7 @@ Rails.application.routes.draw do
   resources :passenger_bookings, only: [ :destroy ]
 
   # Vehicles
-  resources :vehicles, only: [ :index, :new, :create, :edit, :update ]
+  resources :vehicles, except: [ :show ]
 
   # User management (for admin)
   resources :users, only: [ :destroy ] do
