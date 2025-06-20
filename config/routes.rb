@@ -16,6 +16,9 @@ Rails.application.routes.draw do
 
   # Trips and nested Passenger Bookings and Reviews
   resources :trips do
+    collection do
+      get 'filter'
+    end
     member do
       patch "start"
       patch "finish"

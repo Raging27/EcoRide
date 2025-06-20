@@ -33,8 +33,8 @@
       </div>
     </div>
 
-    <!-- Driver Actions: Edit/Delete/Start/Finish Trip -->
-    <% if user_signed_in? && current_user.role.in?(["driver", "both"]) && current_user == @trip.driver %>
+    <!-- Driver/Passenger Actions: Edit/Delete/Start/Finish Trip -->
+    <% if user_signed_in? && current_user == @trip.driver %>
       <div class="card-footer text-center">
         <% if @trip.status == "planned" %>
           <div class="btn-group gap-2" role="group">
@@ -48,6 +48,10 @@
         <% elsif @trip.status == "in_progress" %>
           <%= button_to "Arrivée à destination", finish_trip_path(@trip), method: :patch, class: "btn btn-success" %>
         <% end %>
+      </div>
+    <% elsif user_signed_in? && current_user.role == "passenger" && @trip.status == "planned" %>
+      <div class="card-footer text-center">
+        <%= button_to "Démarrer le voyage", start_trip_path(@trip), method: :patch, class: "btn btn-primary" %>
       </div>
     <% end %>
 
