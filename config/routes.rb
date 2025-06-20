@@ -15,7 +15,7 @@ Rails.application.routes.draw do
   patch "dashboard", to: "dashboard#update"
 
   # Trips and nested Passenger Bookings and Reviews
-  resources :trips, only: [ :index, :show, :new, :create ] do
+  resources :trips do
     member do
       patch "start"
       patch "finish"

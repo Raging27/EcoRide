@@ -1,6 +1,6 @@
 class TripsController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_trip, only: [ :show, :start, :finish ]
+  before_action :set_trip, only: [ :show, :start, :finish, :edit, :update, :destroy ]
 
   # GET /trips
   def index
@@ -118,6 +118,36 @@ class TripsController < ApplicationController
     else
       redirect_to @trip, alert: "Vous n'êtes pas autorisé à terminer ce voyage."
     end
+  end
+
+  def edit
+    unless @trip.driver == current_user && @trip.status == "planned"
+      redirect_to @trip, alert: "Vous ne pouvez modifier que vos voyages planifiés."
+    end
+  end
+
+  def update
+    unless @trip.driver == current_user && @trip.status == "planned"
+      redirect_to @trip, alert: "Vous ne pouvez modifier que vos voyages planifiés."
+      return
+    end
+
+    if @trip.update(trip_params.except(:vehicle_attributes))
+      redirect_to @trip, notice: "Voyage mis à jour avec succès."
+    else
+      flash.now[:alert] = "Voyage non mis à jour."
+      render :edit, status: :unprocessable_entity
+    end
+  end
+
+  def destroy
+    unless @trip.driver == current_user && @trip.status == "planned"
+      redirect_to @trip, alert: "Vous ne pouvez supprimer que vos voyages planifiés."
+      return
+    end
+
+    @trip.destroy
+    redirect_to trips_path, notice: "Voyage supprimé avec succès."
   end
 
   private
