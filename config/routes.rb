@@ -15,7 +15,10 @@ Rails.application.routes.draw do
   patch "dashboard", to: "dashboard#update"
 
   # Trips and nested Passenger Bookings and Reviews
-  resources :trips, only: [ :index, :show, :new, :create ] do
+  resources :trips do
+    collection do
+      get 'filter'
+    end
     member do
       patch "start"
       patch "finish"
@@ -33,7 +36,7 @@ Rails.application.routes.draw do
   resources :passenger_bookings, only: [ :destroy ]
 
   # Vehicles
-  resources :vehicles, only: [ :index, :new, :create, :edit, :update ]
+  resources :vehicles, except: [ :show ]
 
   # User management (for admin)
   resources :users, only: [ :destroy ] do

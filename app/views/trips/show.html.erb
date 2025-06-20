@@ -33,14 +33,25 @@
       </div>
     </div>
 
-    <!-- Driver Actions: Start/Finish Trip -->
-    <% if user_signed_in? && current_user.role.in?(["driver", "both"]) && current_user == @trip.driver %>
+    <!-- Driver/Passenger Actions: Edit/Delete/Start/Finish Trip -->
+    <% if user_signed_in? && current_user == @trip.driver %>
       <div class="card-footer text-center">
         <% if @trip.status == "planned" %>
-          <%= button_to "Démarrer le voyage", start_trip_path(@trip), method: :patch, class: "btn btn-primary" %>
+          <div class="btn-group gap-2" role="group">
+            <%= link_to "Modifier", edit_trip_path(@trip), class: "btn btn-warning" %>
+            <%= button_to "Supprimer", trip_path(@trip), 
+                method: :delete, 
+                class: "btn btn-danger",
+                data: { confirm: "Êtes-vous sûr de vouloir supprimer ce voyage ?" } %>
+            <%= button_to "Démarrer le voyage", start_trip_path(@trip), method: :patch, class: "btn btn-primary" %>
+          </div>
         <% elsif @trip.status == "in_progress" %>
           <%= button_to "Arrivée à destination", finish_trip_path(@trip), method: :patch, class: "btn btn-success" %>
         <% end %>
+      </div>
+    <% elsif user_signed_in? && current_user.role == "passenger" && @trip.status == "planned" %>
+      <div class="card-footer text-center">
+        <%= button_to "Démarrer le voyage", start_trip_path(@trip), method: :patch, class: "btn btn-primary" %>
       </div>
     <% end %>
 

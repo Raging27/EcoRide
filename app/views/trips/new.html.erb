@@ -98,7 +98,8 @@
 
     <div class="mb-3">
       <%= f.label :status, "Statut", class: "form-label" %>
-      <%= f.text_field :status, class: "form-control", placeholder: "ex: prévu" %>
+      <%= f.select :status, [['Prévu', 'planned'], ['En cours', 'in_progress']], { prompt: "Sélectionnez un statut" }, 
+                  { class: "form-control" } %>
     </div>
 
     <div class="mb-3">

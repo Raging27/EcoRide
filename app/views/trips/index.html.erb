@@ -2,63 +2,157 @@
   <h1 class="mb-4">Voyages Disponibles</h1>
 
   <!-- Filter Form -->
-  <%= form_with url: trips_path, method: :get, local: true, class: "row g-3 mb-4" do |f| %>
+  <div class="row g-3 mb-4" id="filterForm">
     <div class="col-md-3">
-      <%= f.label :start_city, "Ville de départ", class: "form-label" %>
-      <%= f.text_field :start_city, value: params[:start_city], class: "form-control" %>
+      <label for="start_city" class="form-label">Ville de départ</label>
+      <input type="text" id="start_city" class="form-control filter-input">
     </div>
     <div class="col-md-3">
-      <%= f.label :end_city, "Ville d'arrivée", class: "form-label" %>
-      <%= f.text_field :end_city, value: params[:end_city], class: "form-control" %>
+      <label for="end_city" class="form-label">Ville d'arrivée</label>
+      <input type="text" id="end_city" class="form-control filter-input">
     </div>
     <div class="col-md-2">
-      <%= f.label :min_price, "Prix min", class: "form-label" %>
-      <%= f.number_field :min_price, value: params[:min_price], class: "form-control", step: 1 %>
+      <label for="min_price" class="form-label">Prix min</label>
+      <input type="number" id="min_price" class="form-control filter-input" step="1">
     </div>
     <div class="col-md-2">
-      <%= f.label :max_price, "Prix max", class: "form-label" %>
-      <%= f.number_field :max_price, value: params[:max_price], class: "form-control", step: 1 %>
+      <label for="max_price" class="form-label">Prix max</label>
+      <input type="number" id="max_price" class="form-control filter-input" step="1">
     </div>
     <div class="col-md-1">
-      <%= f.label :eco_friendly, "Eco", class: "form-label" %>
+      <label for="eco_friendly" class="form-label">Eco</label>
       <div class="form-check">
-        <%= f.check_box :eco_friendly, { checked: params[:eco_friendly].present? && params[:eco_friendly] == "true" }, "true", "false" %>
+        <input type="checkbox" id="eco_friendly" class="form-check-input filter-input">
       </div>
     </div>
     <div class="col-md-1">
-      <%= f.label :max_duration, "Durée max", class: "form-label" %>
-      <%= f.number_field :max_duration, value: params[:max_duration], class: "form-control", step: 1 %>
+      <label for="max_duration" class="form-label">Durée max</label>
+      <input type="number" id="max_duration" class="form-control filter-input" step="1">
     </div>
-    <div class="col-12">
-      <%= f.submit "Rechercher", class: "btn btn-rechercher" %>
+  </div>
+
+  <div id="tripsContainer" class="row">
+    <% @trips.each do |trip| %>
+      <div class="col-md-4 mb-4">
+        <div class="card h-100 shadow-sm">
+          <div class="card-body">
+            <h5 class="card-title"><%= trip.start_city %> → <%= trip.end_city %></h5>
+            <p class="card-text">
+              <strong>Prix :</strong> <%= number_to_currency(trip.price) %><br>
+              <strong>Places Disponibles :</strong> <%= trip.seats_available %><br>
+              <strong>Départ :</strong> <%= trip.start_time.strftime("%d/%m/%Y %H:%M") %>
+            </p>
+            <%= link_to "Voir les détails", trip_path(trip), class: "btn btn-primary" %>
+          </div>
+        </div>
+      </div>
+    <% end %>
+  </div>
+
+  <div id="noTripsMessage" class="alert alert-info d-none">Aucun voyage trouvé.</div>
+
+  <% if user_signed_in? && current_user.role.in?(["driver", "both"]) %>
+    <div class="mb-4 text-center">
+      <%= link_to "Créer un nouveau voyage", new_trip_path, class: "btn btn-success" %>
     </div>
   <% end %>
+</div>
 
-  <% if @trips.any? %>
-    <div class="row">
-      <% @trips.each do |trip| %>
+<%= javascript_tag do %>
+  document.addEventListener('DOMContentLoaded', function() {
+    // Cache DOM elements
+    const filterInputs = document.querySelectorAll('.filter-input');
+    const tripsContainer = document.getElementById('tripsContainer');
+    const noTripsMessage = document.getElementById('noTripsMessage');
+    
+    // Debounce function to limit API calls
+    function debounce(func, wait) {
+      let timeout;
+      return function executedFunction(...args) {
+        const later = () => {
+          clearTimeout(timeout);
+          func(...args);
+        };
+        clearTimeout(timeout);
+        timeout = setTimeout(later, wait);
+      };
+    }
+
+    // Function to format date
+    function formatDate(dateString) {
+      const date = new Date(dateString);
+      return date.toLocaleDateString('fr-FR') + ' ' + 
+             date.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' });
+    }
+
+    // Function to render a single trip card
+    function renderTripCard(trip) {
+      return `
         <div class="col-md-4 mb-4">
           <div class="card h-100 shadow-sm">
             <div class="card-body">
-              <h5 class="card-title"><%= trip.start_city %> &rarr; <%= trip.end_city %></h5>
+              <h5 class="card-title">${trip.start_city} → ${trip.end_city}</h5>
               <p class="card-text">
-                <strong>Prix :</strong> <%= number_to_currency(trip.price) %><br>
-                <strong>Places Disponibles :</strong> <%= trip.seats_available %><br>
-                <strong>Départ :</strong> <%= trip.start_time.strftime("%d/%m/%Y %H:%M") %>
+                <strong>Prix :</strong> ${trip.price}€<br>
+                <strong>Places Disponibles :</strong> ${trip.seats_available}<br>
+                <strong>Départ :</strong> ${formatDate(trip.start_time)}
               </p>
-              <%= link_to "Voir les détails", trip_path(trip), class: "btn btn-primary" %>
+              <a href="/trips/${trip.id}" class="btn btn-primary">Voir les détails</a>
             </div>
           </div>
         </div>
-      <% end %>
-    </div>
-  <% else %>
-    <div class="alert alert-info">Aucun voyage trouvé.</div>
-  <% end %>
-  <% if user_signed_in? && current_user.role.in?(["driver", "both"]) %>
-  <div class="mb-4 text-center">
-    <%= link_to "Créer un nouveau voyage", new_trip_path, class: "btn btn-success" %>
-  </div>
-<% end %>
+      `;
+    }
 
-</div>
+    // Function to fetch and update trips
+    const updateTrips = debounce(async () => {
+      // Get filter values
+      const filters = {
+        start_city: document.getElementById('start_city').value,
+        end_city: document.getElementById('end_city').value,
+        min_price: document.getElementById('min_price').value,
+        max_price: document.getElementById('max_price').value,
+        eco_friendly: document.getElementById('eco_friendly').checked,
+        max_duration: document.getElementById('max_duration').value
+      };
+
+      // Build query string
+      const queryString = Object.entries(filters)
+        .filter(([key, value]) => {
+          // Only include the filter if it has a value, is true for checkbox, or is 0
+          if (key === 'eco_friendly') return value;
+          return value !== '' && value !== null;
+        })
+        .map(([key, value]) => `${key}=${encodeURIComponent(value)}`)
+        .join('&');
+
+      try {
+        // Fetch filtered trips
+        const response = await fetch(`/trips/filter?${queryString}`, {
+          headers: {
+            'Accept': 'application/json',
+            'X-Requested-With': 'XMLHttpRequest'
+          }
+        });
+        
+        const trips = await response.json();
+        
+        // Update UI
+        if (trips.length > 0) {
+          tripsContainer.innerHTML = trips.map(trip => renderTripCard(trip)).join('');
+          noTripsMessage.classList.add('d-none');
+        } else {
+          tripsContainer.innerHTML = '';
+          noTripsMessage.classList.remove('d-none');
+        }
+      } catch (error) {
+        console.error('Error fetching trips:', error);
+      }
+    }, 300); // Debounce delay of 300ms
+
+    // Add event listeners to all filter inputs
+    filterInputs.forEach(input => {
+      input.addEventListener('input', updateTrips);
+    });
+  });
+<% end %>

@@ -1,6 +1,6 @@
 class TripsController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_trip, only: [ :show, :start, :finish ]
+  before_action :set_trip, only: [ :show, :start, :finish, :edit, :update, :destroy ]
 
   # GET /trips
   def index
@@ -102,10 +102,18 @@ class TripsController < ApplicationController
       else
         redirect_to @trip, alert: "Impossible de démarrer le voyage."
       end
+    elsif current_user.role == "passenger" && current_user.credits >= 2
+      if current_user.passenger_bookings.create!(trip: @trip, status: "confirmed") && @trip.update(status: "in_progress")
+        current_user.update!(credits: current_user.credits - 2)
+        redirect_to @trip, notice: "Voyage démarré avec succès."
+      else
+        redirect_to @trip, alert: "Impossible de démarrer le voyage."
+      end
     else
       redirect_to @trip, alert: "Vous n'êtes pas autorisé à démarrer ce voyage."
     end
   end
+
 
   # PATCH /trips/:id/finish
   def finish
@@ -118,6 +126,69 @@ class TripsController < ApplicationController
     else
       redirect_to @trip, alert: "Vous n'êtes pas autorisé à terminer ce voyage."
     end
+  end
+
+  def edit
+    unless @trip.driver == current_user && @trip.status == "planned"
+      redirect_to @trip, alert: "Vous ne pouvez modifier que vos voyages planifiés."
+    end
+  end
+
+  def update
+    unless @trip.driver == current_user && @trip.status == "planned"
+      redirect_to @trip, alert: "Vous ne pouvez modifier que vos voyages planifiés."
+      return
+    end
+
+    if @trip.update(trip_params.except(:vehicle_attributes))
+      redirect_to @trip, notice: "Voyage mis à jour avec succès."
+    else
+      flash.now[:alert] = "Voyage non mis à jour."
+      render :edit, status: :unprocessable_entity
+    end
+  end
+
+  def destroy
+    unless @trip.driver == current_user && @trip.status == "planned"
+      redirect_to @trip, alert: "Vous ne pouvez supprimer que vos voyages planifiés."
+      return
+    end
+
+    @trip.destroy
+    redirect_to trips_path, notice: "Voyage supprimé avec succès."
+  end
+
+  def filter
+    @trips = Trip.all
+
+    if params[:start_city].present?
+      @trips = @trips.where("start_city ILIKE ?", "%#{params[:start_city]}%")
+    end
+
+    if params[:end_city].present?
+      @trips = @trips.where("end_city ILIKE ?", "%#{params[:end_city]}%")
+    end
+
+    if params[:min_price].present?
+      @trips = @trips.where("price >= ?", params[:min_price])
+    end
+
+    if params[:max_price].present?
+      @trips = @trips.where("price <= ?", params[:max_price])
+    end
+
+    if params[:eco_friendly].present? && params[:eco_friendly] == "true"
+      @trips = @trips.joins(:vehicle).where(vehicles: { electric: true })
+    end
+
+    if params[:max_duration].present?
+      max_duration = params[:max_duration].to_f
+      @trips = @trips.where("EXTRACT(EPOCH FROM (end_time - start_time)) / 3600 <= ?", max_duration)
+    end
+
+    render json: @trips.as_json(
+      only: [:id, :start_city, :end_city, :price, :seats_available, :start_time]
+    )
   end
 
   private
