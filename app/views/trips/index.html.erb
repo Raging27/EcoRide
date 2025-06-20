@@ -59,7 +59,8 @@
 </div>
 
 <%= javascript_tag do %>
-  document.addEventListener('DOMContentLoaded', function() {
+  // Function to initialize all event listeners and functionality
+  function initializeTripsPage() {
     // Cache DOM elements
     const filterInputs = document.querySelectorAll('.filter-input');
     const tripsContainer = document.getElementById('tripsContainer');
@@ -119,7 +120,6 @@
       // Build query string
       const queryString = Object.entries(filters)
         .filter(([key, value]) => {
-          // Only include the filter if it has a value, is true for checkbox, or is 0
           if (key === 'eco_friendly') return value;
           return value !== '' && value !== null;
         })
@@ -127,7 +127,6 @@
         .join('&');
 
       try {
-        // Fetch filtered trips
         const response = await fetch(`/trips/filter?${queryString}`, {
           headers: {
             'Accept': 'application/json',
@@ -137,7 +136,6 @@
         
         const trips = await response.json();
         
-        // Update UI
         if (trips.length > 0) {
           tripsContainer.innerHTML = trips.map(trip => renderTripCard(trip)).join('');
           noTripsMessage.classList.add('d-none');
@@ -148,11 +146,21 @@
       } catch (error) {
         console.error('Error fetching trips:', error);
       }
-    }, 300); // Debounce delay of 300ms
+    }, 300);
+
+    // Remove any existing event listeners
+    filterInputs.forEach(input => {
+      input.removeEventListener('input', updateTrips);
+    });
 
     // Add event listeners to all filter inputs
     filterInputs.forEach(input => {
       input.addEventListener('input', updateTrips);
     });
-  });
+  }
+
+  // Listen for both turbo:load/turbolinks:load and DOMContentLoaded
+  document.addEventListener('DOMContentLoaded', initializeTripsPage);
+  document.addEventListener('turbo:load', initializeTripsPage);
+  document.addEventListener('turbolinks:load', initializeTripsPage);
 <% end %>
