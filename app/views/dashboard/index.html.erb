@@ -36,6 +36,7 @@
                     </p>
                   </div>
                   <div class="card-footer">
+                    <%= link_to "Delete", vehicle_path(vehicle), data: { turbo_method: :delete, turbo_confirm: "Are you sure want to delete?" }, class: "btn btn-danger" %>
                     <!-- Optionally add an edit link here if editing becomes allowed -->
                   </div>
                 </div>

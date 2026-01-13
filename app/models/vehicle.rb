@@ -6,4 +6,6 @@ class Vehicle < ApplicationRecord
   validates :brand, presence: true
   validates :model, presence: true
   validates :color, presence: true
+
+  has_many :trips, dependent: :destroy
 end

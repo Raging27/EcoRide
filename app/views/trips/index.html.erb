@@ -42,7 +42,10 @@
               <strong>Places Disponibles :</strong> <%= trip.seats_available %><br>
               <strong>Départ :</strong> <%= trip.start_time.strftime("%d/%m/%Y %H:%M") %>
             </p>
-            <%= link_to "Voir les détails", trip_path(trip), class: "btn btn-primary" %>
+            <div class="d-flex justify-content-between">
+              <%= link_to "Voir les détails", trip_path(trip), class: "btn btn-primary" %>
+              <%= link_to "Delete", trip_path(trip), data: {turbo_method: :delete, turbo_confirm: "are you sure want to delete?"}, class: "btn btn-danger" %>
+            </div>
           </div>
         </div>
       </div>
