@@ -44,7 +44,9 @@
             </p>
             <div class="d-flex justify-content-between">
               <%= link_to "Voir les détails", trip_path(trip), class: "btn btn-primary" %>
-              <%= link_to "Delete", trip_path(trip), data: {turbo_method: :delete, turbo_confirm: "are you sure want to delete?"}, class: "btn btn-danger" %>
+              <% if trip.driver === current_user %>
+                <%= link_to "Delete", trip_path(trip), data: {turbo_method: :delete, turbo_confirm: "are you sure want to delete?"}, class: "btn btn-danger" %>
+              <% end %>
             </div>
           </div>
         </div>

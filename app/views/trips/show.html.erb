@@ -43,15 +43,13 @@
                 method: :delete, 
                 class: "btn btn-danger",
                 data: { confirm: "Êtes-vous sûr de vouloir supprimer ce voyage ?" } %>
-            <%= button_to "Démarrer le voyage", start_trip_path(@trip), method: :patch, class: "btn btn-primary" %>
+            <% if current_user.role == "driver" %>
+              <%= button_to "Démarrer le voyage", start_trip_path(@trip), method: :patch, class: "btn btn-primary" %>
+            <% end %>
           </div>
         <% elsif @trip.status == "in_progress" %>
           <%= button_to "Arrivée à destination", finish_trip_path(@trip), method: :patch, class: "btn btn-success" %>
         <% end %>
-      </div>
-    <% elsif user_signed_in? && current_user.role == "passenger" && @trip.status == "planned" %>
-      <div class="card-footer text-center">
-        <%= button_to "Démarrer le voyage", start_trip_path(@trip), method: :patch, class: "btn btn-primary" %>
       </div>
     <% end %>
 
