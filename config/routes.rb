@@ -17,11 +17,12 @@ Rails.application.routes.draw do
   # Trips and nested Passenger Bookings and Reviews
   resources :trips do
     collection do
-      get 'filter'
+      get "filter"
     end
     member do
       patch "start"
       patch "finish"
+      patch "book"
     end
     resources :passenger_bookings, only: [ :create ]
     resources :reviews, only: [ :new, :create ] do

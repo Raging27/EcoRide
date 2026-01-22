@@ -103,7 +103,7 @@ class TripsController < ApplicationController
         redirect_to @trip, alert: "Impossible de démarrer le voyage."
       end
     elsif current_user.role == "passenger" && current_user.credits >= 2
-      if current_user.passenger_bookings.create!(trip: @trip, status: "confirmed") && @trip.update(status: "in_progress")
+      if current_user.passenger_bookings.create!(trip: @trip, status: "confirmed")
         current_user.update!(credits: current_user.credits - 2)
         redirect_to @trip, notice: "Voyage démarré avec succès."
       else

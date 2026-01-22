@@ -34,20 +34,25 @@
     </div>
 
     <!-- Driver/Passenger Actions: Edit/Delete/Start/Finish Trip -->
-    <% if user_signed_in? && current_user == @trip.driver %>
+    <% if user_signed_in? %>
       <div class="card-footer text-center">
         <% if @trip.status == "planned" %>
           <div class="btn-group gap-2" role="group">
-            <%= link_to "Modifier", edit_trip_path(@trip), class: "btn btn-warning" %>
-            <%= button_to "Supprimer", trip_path(@trip), 
-                method: :delete, 
-                class: "btn btn-danger",
-                data: { confirm: "Êtes-vous sûr de vouloir supprimer ce voyage ?" } %>
+            <% if current_user == @trip.driver %>
+              <%= link_to "Modifier", edit_trip_path(@trip), class: "btn btn-warning" %>
+              <%= button_to "Supprimer", trip_path(@trip), 
+                  method: :delete, 
+                  class: "btn btn-danger",
+                  data: { confirm: "Êtes-vous sûr de vouloir supprimer ce voyage ?" } %>
+            <% end%>
             <% if current_user.role == "driver" %>
               <%= button_to "Démarrer le voyage", start_trip_path(@trip), method: :patch, class: "btn btn-primary" %>
+            <% end%>
+            <% if current_user.role == "passenger" && PassengerBooking.find_by_trip_id(@trip.id).blank? %>
+              <%= button_to  "réserver le voyage", start_trip_path(@trip), method: :patch, class: "btn btn-primary" %>
             <% end %>
           </div>
-        <% elsif @trip.status == "in_progress" %>
+        <% elsif @trip.status == "in_progress" && current_user.role == "driver" %>
           <%= button_to "Arrivée à destination", finish_trip_path(@trip), method: :patch, class: "btn btn-success" %>
         <% end %>
       </div>
