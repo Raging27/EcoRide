@@ -93,6 +93,10 @@
 
     // Function to render a single trip card
     function renderTripCard(trip) {
+      deletebtn = '';
+      if(trip.driver_id == <%= current_user&.id %>) {
+        deletebtn = `<a data-turbo-method="delete" data-turbo-confirm="are you sure want to delete?" class="btn btn-danger" href="/trips/${trip.id}">Delete</a>`
+      }
       return `
         <div class="col-md-4 mb-4">
           <div class="card h-100 shadow-sm">
@@ -103,7 +107,10 @@
                 <strong>Places Disponibles :</strong> ${trip.seats_available}<br>
                 <strong>Départ :</strong> ${formatDate(trip.start_time)}
               </p>
-              <a href="/trips/${trip.id}" class="btn btn-primary">Voir les détails</a>
+              <div class="d-flex justify-content-between">
+                <a href="/trips/${trip.id}" class="btn btn-primary">Voir les détails</a>
+                ${deletebtn}
+              </div>
             </div>
           </div>
         </div>

@@ -187,7 +187,7 @@ class TripsController < ApplicationController
     end
 
     render json: @trips.as_json(
-      only: [:id, :start_city, :end_city, :price, :seats_available, :start_time]
+      only: [ :id, :start_city, :end_city, :price, :seats_available, :start_time, :driver_id ]
     )
   end
 
