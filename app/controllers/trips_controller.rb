@@ -102,9 +102,13 @@ class TripsController < ApplicationController
       else
         redirect_to @trip, alert: "Impossible de démarrer le voyage."
       end
-    elsif current_user.role == "passenger" && current_user.credits >= 2
+    elsif current_user.role == "passenger" && current_user.credits >= @trip.price
       if current_user.passenger_bookings.create!(trip: @trip, status: "confirmed")
-        current_user.update!(credits: current_user.credits - 2)
+        current_user.update!(credits: current_user.credits - @trip.price)
+        @trip.driver.update(credits: @trip.driver.credits + (@trip.price - 2))
+        if user = User.find_by_role("admin")
+          user.update(credits: user.credits + 2)
+        end
         redirect_to @trip, notice: "Voyage démarré avec succès."
       else
         redirect_to @trip, alert: "Impossible de démarrer le voyage."
