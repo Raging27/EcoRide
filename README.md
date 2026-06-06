@@ -1,126 +1,113 @@
 # EcoRide
 
-This is the EcoRide project – a platform for eco-friendly carpooling.
-
-markdown
-Copy
-# EcoRide 🚗🌱
-
-[![Ruby](https://img.shields.io/badge/Ruby-3.3.0-red)](https://ruby-lang.org)
+[![Ruby](https://img.shields.io/badge/Ruby-3.3.5-red)](https://ruby-lang.org)
 [![Rails](https://img.shields.io/badge/Rails-8.0.1-red)](https://rubyonrails.org)
-[![PostgreSQL](https://img.shields.io/badge/PostgreSQL-15-blue)](https://www.postgresql.org)
+[![PostgreSQL](https://img.shields.io/badge/PostgreSQL-16-blue)](https://www.postgresql.org)
 
 Plateforme de covoiturage écologique avec gestion de trajets et crédits utilisateurs.
 
-## 📋 Table des matières
-- [Prérequis](#-prérequis)
-- [Installation](#-installation)
-- [Base de données](#-base-de-données)
-- [Démarrage](#-démarrage)
-- [Bonnes pratiques Git](#-bonnes-pratiques-git)
-- [Documentation](#-documentation)
-- [Déploiement](#-déploiement)
-- [Contribuer](#-contribuer)
-- [Licence](#-licence)
+## Table des matières
+- [Prérequis](#prérequis)
+- [Run with Docker](#run-with-docker)
+- [Installation locale](#installation-locale)
+- [Base de données](#base-de-données)
+- [Démarrage](#démarrage)
+- [Bonnes pratiques Git](#bonnes-pratiques-git)
+- [Identifiants de test](#identifiants-de-test)
+- [Contribuer](#contribuer)
+- [Licence](#licence)
 
-## 🛠️ Prérequis
-- Ruby 3.3.0
+## Prérequis
+
+- Ruby 3.3.5
 - Rails 8.0.1
-- PostgreSQL 15
-- Node.js 18+
-- Yarn 1.22+
+- PostgreSQL 16
+- MongoDB Atlas account (URI required)
 
-## 🚀 Installation
+## Run with Docker
+
 ```bash
- Cloner le dépôt
+# 1. Clone the repository
 git clone https://github.com/Raging27/EcoRide
 cd EcoRide
 
-# Installer les dépendances
+# 2. Create your local environment file
+cp .env.example .env
+
+# 3. Fill in the required secrets in .env:
+#    RAILS_MASTER_KEY  — value from config/master.key (ask the project maintainer)
+#    MONGODB_URI       — your MongoDB Atlas connection string
+
+# 4. Build and start
+docker compose up --build
+
+# App is available at http://localhost:3000
+```
+
+The `web` container runs `db:prepare` on boot, so migrations are applied automatically.
+
+## Installation locale
+
+```bash
+git clone https://github.com/Raging27/EcoRide
+cd EcoRide
+
 bundle install
-yarn install
 
-# Configuration de la base de données
-cp config/database.yml.example config/database.yml
+rails db:create db:migrate db:seed
+```
 
-# Créer et peupler la base de données
-rails db:create
-rails db:migrate
-rails db:seed
-📊 Base de données
-Modèle conceptuel :
-Diagramme MCD
+## Base de données
 
-Structure SQL disponible dans :
+Ce projet utilise deux bases de données :
 
-db/schema.rb (schéma ActiveRecord)
+- **PostgreSQL** — données relationnelles (utilisateurs, trajets, réservations)
+- **MongoDB Atlas** — données complémentaires via Mongoid
 
-db/structure.sql (export PostgreSQL)
+Schéma ActiveRecord disponible dans `db/schema.rb`.
 
-▶️ Démarrage
-bash
-Copy
-# Démarrer le serveur
+## Démarrage
+
+```bash
 rails server
+```
+
 Accès : http://localhost:3000
 
-🌿 Bonnes pratiques Git
+## Bonnes pratiques Git
+
 Workflow Git Flow :
 
-Copy
+```
 main      → Branche de production
 develop   → Branche de développement
 feature/* → Branches de fonctionnalités
+```
+
 Processus :
 
-Créer une branche depuis develop :
-git checkout -b feature/nouvelle-fonctionnalite
+1. Créer une branche depuis `develop` : `git checkout -b feature/nouvelle-fonctionnalite`
+2. Faire des commits atomiques : `git commit -m "feat: ajout fonctionnalité X"`
+3. Ouvrir une Pull Request vers `develop`
+4. Après validation : merge dans `develop`, puis `develop` → `main` pour la production
 
-Faire des commits atomiques :
-git commit -m "feat: ajout fonctionnalité X"
+## Identifiants de test
 
-Ouvrir une Pull Request vers develop
+| Rôle       | Email                 | Mot de passe |
+|------------|-----------------------|--------------|
+| Admin      | admin@example.com     | Password123@ |
+| Employé    | employee@example.com  | Password123@ |
+| Conducteur | user1@example.com     | Password123@ |
+| Passager   | user2@example.com     | Password123@ |
 
-Après validation CI/CD : merge dans develop
+## Contribuer
 
-Déploiement en production via merge develop → main
+1. Forker le projet
+2. Créer une branche (`feature/ma-fonctionnalite`)
+3. Commiter les changements
+4. Pusher vers la branche
+5. Ouvrir une Pull Request
 
-📚 Documentation
-Manuel d'utilisation
+## Licence
 
-Charte graphique
-
-Documentation technique
-
-Kanban de projet
-https://trello.com/b/M5A2TT9C/kanban-ecoride
-
-🌍 Déploiement
-🚨 Statut actuel :
-Le déploiement sur Heroku est temporairement bloqué pour cause de problème d'accès au compte. L'application sera mise en ligne dès la résolution du problème par le support Heroku.
-
-Environnement cible :
-
-Hébergeur : Heroku
-
-Version Ruby : 3.3.0
-
-Base de données : PostgreSQL 15
-
-🔑 Identifiants de test
-Rôle	Email	Mot de passe
-Admin	admin@example.com	Password123@
-Employé	employee@example.com	Password123@
-Conducteur	user1@example.com	Password123@
-Passager	user2@example.com	Password123@
-🤝 Contribuer
-Forker le projet
-
-Créer une branche (feature/ma-fonctionnalite)
-
-Faire un commit des changements
-
-Pusher vers la branche
-
-Ouvrir une Pull Request
-
+Ce projet est sous licence MIT.
