@@ -93,7 +93,7 @@
 
     // Function to render a single trip card
     function renderTripCard(trip) {
-      deletebtn = '';
+      let deletebtn = '';
       if(trip.driver_id == <%= current_user&.id %>) {
         deletebtn = `<a data-turbo-method="delete" data-turbo-confirm="are you sure want to delete?" class="btn btn-danger" href="/trips/${trip.id}">Delete</a>`
       }
@@ -160,19 +160,17 @@
       }
     }, 300);
 
-    // Remove any existing event listeners
+    // Add event listeners to all filter inputs — per-element guard prevents
+    // double-binding on the same element while allowing re-attachment to fresh
+    // elements after Turbo navigation replaces the DOM.
     filterInputs.forEach(input => {
-      input.removeEventListener('input', updateTrips);
-    });
-
-    // Add event listeners to all filter inputs
-    filterInputs.forEach(input => {
+      if (input.dataset.filterBound) return;
+      input.dataset.filterBound = "true";
       input.addEventListener('input', updateTrips);
     });
   }
 
-  // Listen for both turbo:load/turbolinks:load and DOMContentLoaded
+  // Listen for Turbo navigation and initial page load
   document.addEventListener('DOMContentLoaded', initializeTripsPage);
   document.addEventListener('turbo:load', initializeTripsPage);
-  document.addEventListener('turbolinks:load', initializeTripsPage);
 <% end %>
