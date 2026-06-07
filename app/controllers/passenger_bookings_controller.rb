@@ -15,11 +15,9 @@ class PassengerBookingsController < ApplicationController
       redirect_to trip_path(@trip), alert: "Aucune place disponible pour ce voyage." and return
     end
 
-    booking_cost = 1
-
-    # Check if the passenger has enough credits
-    if current_user.credits < booking_cost
-      redirect_to trip_path(@trip), alert: "Vous n'avez pas assez de crédits pour réserver ce voyage." and return
+    # Check if the passenger has enough credits (passenger pays full trip price per spec)
+    if current_user.credits < @trip.price
+      redirect_to trip_path(@trip), alert: "Crédits insuffisants pour réserver ce voyage." and return
     end
 
     # Prevent duplicate bookings for the same trip
@@ -30,10 +28,13 @@ class PassengerBookingsController < ApplicationController
     ActiveRecord::Base.transaction do
       @booking = PassengerBooking.create!(trip: @trip, passenger: current_user, status: "confirmed")
       @trip.update!(seats_available: @trip.seats_available - 1)
-      current_user.update!(credits: current_user.credits - booking_cost)
+      current_user.update!(credits: current_user.credits - @trip.price)
+      @trip.driver.update!(credits: @trip.driver.credits + (@trip.price - 2))
+      admin = User.find_by(role: "admin")
+      admin.update!(credits: admin.credits + 2) if admin
     end
 
-    redirect_to trip_path(@trip), notice: "Réservation effectuée avec succès. #{booking_cost} crédit a été déduit."
+    redirect_to trip_path(@trip), notice: "Réservation effectuée avec succès. #{@trip.price} crédits ont été déduits."
   rescue ActiveRecord::RecordInvalid => e
     Rails.logger.error("Erreur lors de la réservation du voyage #{@trip.id}: #{e.message}")
     redirect_to trip_path(@trip), alert: "Échec de la réservation : #{e.message}"
