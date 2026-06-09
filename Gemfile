@@ -3,6 +3,8 @@ gem "devise"
 gem "mongoid"
 
 gem "mongo", "~> 2"
+gem "chartkick"
+gem "groupdate"
 
 
 # Bundle edge Rails instead: gem "rails", github: "rails/rails", branch: "main"

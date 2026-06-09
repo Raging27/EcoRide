@@ -18,10 +18,13 @@ class DashboardController < ApplicationController
     when "employee"
       @pending_reviews = Review.where(status: "pending")
     when "admin"
-      @total_trips = Trip.count
-      @total_users = User.count
-      @total_credits = User.sum(:credits)
-      @users = User.all
+      @total_trips    = Trip.count
+      @total_users    = User.count
+      @total_credits  = User.sum(:credits)
+      @users          = User.all
+      @trips_by_day   = Trip.group_by_day(:created_at, last: 30).count
+      @credits_by_day = PassengerBooking.group_by_day(:created_at, last: 30).count
+                                        .transform_values { |v| v * 2 }
     else
       @vehicles = []
       @driven_trips = []

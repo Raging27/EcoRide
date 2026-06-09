@@ -126,6 +126,20 @@
       <p><strong>Total des crédits :</strong> <%= @total_credits %></p>
     </div>
   </div>
+
+  <div class="card mb-4">
+    <div class="card-body">
+      <h3 class="h5 mb-3">Trajets créés (30 derniers jours)</h3>
+      <%= line_chart @trips_by_day, colors: ["#0d6efd"], height: "260px" %>
+    </div>
+  </div>
+  <div class="card mb-4">
+    <div class="card-body">
+      <h3 class="h5 mb-3">Crédits gagnés par la plateforme (30 derniers jours)</h3>
+      <%= line_chart @credits_by_day, colors: ["#198754"], height: "260px" %>
+    </div>
+  </div>
+
   <h3>Gestion des comptes utilisateurs</h3>
   <% if @users.present? %>
     <table class="table table-striped">
