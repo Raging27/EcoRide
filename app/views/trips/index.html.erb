@@ -45,7 +45,7 @@
             <div class="d-flex justify-content-between">
               <%= link_to "Voir les détails", trip_path(trip), class: "btn btn-primary" %>
               <% if trip.driver === current_user %>
-                <%= link_to "Delete", trip_path(trip), data: {turbo_method: :delete, turbo_confirm: "are you sure want to delete?"}, class: "btn btn-danger" %>
+                <%= link_to "Supprimer", trip_path(trip), data: {turbo_method: :delete, turbo_confirm: "Êtes-vous sûr de vouloir supprimer ce trajet ?"}, class: "btn btn-danger" %>
               <% end %>
             </div>
           </div>
@@ -95,7 +95,7 @@
     function renderTripCard(trip) {
       let deletebtn = '';
       if(trip.driver_id == <%= current_user&.id %>) {
-        deletebtn = `<a data-turbo-method="delete" data-turbo-confirm="are you sure want to delete?" class="btn btn-danger" href="/trips/${trip.id}">Delete</a>`
+        deletebtn = `<a data-turbo-method="delete" data-turbo-confirm="Êtes-vous sûr de vouloir supprimer ce trajet ?" class="btn btn-danger" href="/trips/${trip.id}">Supprimer</a>`
       }
       return `
         <div class="col-md-4 mb-4">
@@ -103,7 +103,7 @@
             <div class="card-body">
               <h5 class="card-title">${trip.start_city} → ${trip.end_city}</h5>
               <p class="card-text">
-                <strong>Prix :</strong> ${trip.price}€<br>
+                <strong>Prix :</strong> ${Number(trip.price).toFixed(2).replace('.', ',')} €<br>
                 <strong>Places Disponibles :</strong> ${trip.seats_available}<br>
                 <strong>Départ :</strong> ${formatDate(trip.start_time)}
               </p>

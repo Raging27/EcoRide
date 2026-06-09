@@ -19,7 +19,7 @@
         <!-- Right Column: Places & Véhicule -->
         <div class="col-md-6">
           <p><strong>Places disponibles :</strong> <%= @trip.seats_available %></p>
-          <p><strong>Statut :</strong> <%= @trip.status %></p>
+          <p><strong>Statut :</strong> <%= trip_status_badge(@trip.status) %></p>
           <p>
             <strong>Véhicule :</strong>
             <% if @trip.vehicle.present? %>
