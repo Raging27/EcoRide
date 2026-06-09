@@ -2,7 +2,7 @@
 -- PostgreSQL database dump
 --
 
-\restrict hExZ8DMWnM33aasI6LlsHSFFh05Hs5FdTBi14tSoCeSrFYrrxNnCB6IdnHeYvhP
+\restrict xjaBmIE9lfXm8tMx7hCSlzDzjcQRlTnoBU4nfc6u4h1c0QeaUgAar4oO2F4SFgs
 
 -- Dumped from database version 16.14 (Debian 16.14-1.pgdg13+1)
 -- Dumped by pg_dump version 16.14 (Debian 16.14-1.pgdg13+1)
@@ -23,7 +23,7 @@ SET default_tablespace = '';
 SET default_table_access_method = heap;
 
 --
--- Name: ar_internal_metadata; Type: TABLE; Schema: public; Owner: -
+-- Name: ar_internal_metadata; Type: TABLE; Schema: public; Owner: eco_ride
 --
 
 CREATE TABLE public.ar_internal_metadata (
@@ -34,8 +34,10 @@ CREATE TABLE public.ar_internal_metadata (
 );
 
 
+ALTER TABLE public.ar_internal_metadata OWNER TO eco_ride;
+
 --
--- Name: passenger_bookings; Type: TABLE; Schema: public; Owner: -
+-- Name: passenger_bookings; Type: TABLE; Schema: public; Owner: eco_ride
 --
 
 CREATE TABLE public.passenger_bookings (
@@ -48,8 +50,10 @@ CREATE TABLE public.passenger_bookings (
 );
 
 
+ALTER TABLE public.passenger_bookings OWNER TO eco_ride;
+
 --
--- Name: passenger_bookings_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+-- Name: passenger_bookings_id_seq; Type: SEQUENCE; Schema: public; Owner: eco_ride
 --
 
 CREATE SEQUENCE public.passenger_bookings_id_seq
@@ -60,15 +64,17 @@ CREATE SEQUENCE public.passenger_bookings_id_seq
     CACHE 1;
 
 
+ALTER SEQUENCE public.passenger_bookings_id_seq OWNER TO eco_ride;
+
 --
--- Name: passenger_bookings_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+-- Name: passenger_bookings_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: eco_ride
 --
 
 ALTER SEQUENCE public.passenger_bookings_id_seq OWNED BY public.passenger_bookings.id;
 
 
 --
--- Name: schema_migrations; Type: TABLE; Schema: public; Owner: -
+-- Name: schema_migrations; Type: TABLE; Schema: public; Owner: eco_ride
 --
 
 CREATE TABLE public.schema_migrations (
@@ -76,8 +82,10 @@ CREATE TABLE public.schema_migrations (
 );
 
 
+ALTER TABLE public.schema_migrations OWNER TO eco_ride;
+
 --
--- Name: trips; Type: TABLE; Schema: public; Owner: -
+-- Name: trips; Type: TABLE; Schema: public; Owner: eco_ride
 --
 
 CREATE TABLE public.trips (
@@ -96,8 +104,10 @@ CREATE TABLE public.trips (
 );
 
 
+ALTER TABLE public.trips OWNER TO eco_ride;
+
 --
--- Name: trips_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+-- Name: trips_id_seq; Type: SEQUENCE; Schema: public; Owner: eco_ride
 --
 
 CREATE SEQUENCE public.trips_id_seq
@@ -108,15 +118,17 @@ CREATE SEQUENCE public.trips_id_seq
     CACHE 1;
 
 
+ALTER SEQUENCE public.trips_id_seq OWNER TO eco_ride;
+
 --
--- Name: trips_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+-- Name: trips_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: eco_ride
 --
 
 ALTER SEQUENCE public.trips_id_seq OWNED BY public.trips.id;
 
 
 --
--- Name: users; Type: TABLE; Schema: public; Owner: -
+-- Name: users; Type: TABLE; Schema: public; Owner: eco_ride
 --
 
 CREATE TABLE public.users (
@@ -133,12 +145,17 @@ CREATE TABLE public.users (
     created_at timestamp(6) without time zone NOT NULL,
     updated_at timestamp(6) without time zone NOT NULL,
     suspended boolean DEFAULT false NOT NULL,
-    suppressed boolean DEFAULT false NOT NULL
+    suppressed boolean DEFAULT false NOT NULL,
+    smoker boolean DEFAULT false NOT NULL,
+    animal boolean DEFAULT false NOT NULL,
+    custom_preferences text
 );
 
 
+ALTER TABLE public.users OWNER TO eco_ride;
+
 --
--- Name: users_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+-- Name: users_id_seq; Type: SEQUENCE; Schema: public; Owner: eco_ride
 --
 
 CREATE SEQUENCE public.users_id_seq
@@ -149,15 +166,17 @@ CREATE SEQUENCE public.users_id_seq
     CACHE 1;
 
 
+ALTER SEQUENCE public.users_id_seq OWNER TO eco_ride;
+
 --
--- Name: users_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+-- Name: users_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: eco_ride
 --
 
 ALTER SEQUENCE public.users_id_seq OWNED BY public.users.id;
 
 
 --
--- Name: vehicles; Type: TABLE; Schema: public; Owner: -
+-- Name: vehicles; Type: TABLE; Schema: public; Owner: eco_ride
 --
 
 CREATE TABLE public.vehicles (
@@ -174,8 +193,10 @@ CREATE TABLE public.vehicles (
 );
 
 
+ALTER TABLE public.vehicles OWNER TO eco_ride;
+
 --
--- Name: vehicles_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+-- Name: vehicles_id_seq; Type: SEQUENCE; Schema: public; Owner: eco_ride
 --
 
 CREATE SEQUENCE public.vehicles_id_seq
@@ -186,43 +207,45 @@ CREATE SEQUENCE public.vehicles_id_seq
     CACHE 1;
 
 
+ALTER SEQUENCE public.vehicles_id_seq OWNER TO eco_ride;
+
 --
--- Name: vehicles_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+-- Name: vehicles_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: eco_ride
 --
 
 ALTER SEQUENCE public.vehicles_id_seq OWNED BY public.vehicles.id;
 
 
 --
--- Name: passenger_bookings id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: passenger_bookings id; Type: DEFAULT; Schema: public; Owner: eco_ride
 --
 
 ALTER TABLE ONLY public.passenger_bookings ALTER COLUMN id SET DEFAULT nextval('public.passenger_bookings_id_seq'::regclass);
 
 
 --
--- Name: trips id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: trips id; Type: DEFAULT; Schema: public; Owner: eco_ride
 --
 
 ALTER TABLE ONLY public.trips ALTER COLUMN id SET DEFAULT nextval('public.trips_id_seq'::regclass);
 
 
 --
--- Name: users id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: users id; Type: DEFAULT; Schema: public; Owner: eco_ride
 --
 
 ALTER TABLE ONLY public.users ALTER COLUMN id SET DEFAULT nextval('public.users_id_seq'::regclass);
 
 
 --
--- Name: vehicles id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: vehicles id; Type: DEFAULT; Schema: public; Owner: eco_ride
 --
 
 ALTER TABLE ONLY public.vehicles ALTER COLUMN id SET DEFAULT nextval('public.vehicles_id_seq'::regclass);
 
 
 --
--- Name: ar_internal_metadata ar_internal_metadata_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: ar_internal_metadata ar_internal_metadata_pkey; Type: CONSTRAINT; Schema: public; Owner: eco_ride
 --
 
 ALTER TABLE ONLY public.ar_internal_metadata
@@ -230,7 +253,7 @@ ALTER TABLE ONLY public.ar_internal_metadata
 
 
 --
--- Name: passenger_bookings passenger_bookings_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: passenger_bookings passenger_bookings_pkey; Type: CONSTRAINT; Schema: public; Owner: eco_ride
 --
 
 ALTER TABLE ONLY public.passenger_bookings
@@ -238,7 +261,7 @@ ALTER TABLE ONLY public.passenger_bookings
 
 
 --
--- Name: schema_migrations schema_migrations_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: schema_migrations schema_migrations_pkey; Type: CONSTRAINT; Schema: public; Owner: eco_ride
 --
 
 ALTER TABLE ONLY public.schema_migrations
@@ -246,7 +269,7 @@ ALTER TABLE ONLY public.schema_migrations
 
 
 --
--- Name: trips trips_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: trips trips_pkey; Type: CONSTRAINT; Schema: public; Owner: eco_ride
 --
 
 ALTER TABLE ONLY public.trips
@@ -254,7 +277,7 @@ ALTER TABLE ONLY public.trips
 
 
 --
--- Name: users users_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: users users_pkey; Type: CONSTRAINT; Schema: public; Owner: eco_ride
 --
 
 ALTER TABLE ONLY public.users
@@ -262,7 +285,7 @@ ALTER TABLE ONLY public.users
 
 
 --
--- Name: vehicles vehicles_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: vehicles vehicles_pkey; Type: CONSTRAINT; Schema: public; Owner: eco_ride
 --
 
 ALTER TABLE ONLY public.vehicles
@@ -270,56 +293,56 @@ ALTER TABLE ONLY public.vehicles
 
 
 --
--- Name: index_passenger_bookings_on_passenger_id; Type: INDEX; Schema: public; Owner: -
+-- Name: index_passenger_bookings_on_passenger_id; Type: INDEX; Schema: public; Owner: eco_ride
 --
 
 CREATE INDEX index_passenger_bookings_on_passenger_id ON public.passenger_bookings USING btree (passenger_id);
 
 
 --
--- Name: index_passenger_bookings_on_trip_id; Type: INDEX; Schema: public; Owner: -
+-- Name: index_passenger_bookings_on_trip_id; Type: INDEX; Schema: public; Owner: eco_ride
 --
 
 CREATE INDEX index_passenger_bookings_on_trip_id ON public.passenger_bookings USING btree (trip_id);
 
 
 --
--- Name: index_trips_on_driver_id; Type: INDEX; Schema: public; Owner: -
+-- Name: index_trips_on_driver_id; Type: INDEX; Schema: public; Owner: eco_ride
 --
 
 CREATE INDEX index_trips_on_driver_id ON public.trips USING btree (driver_id);
 
 
 --
--- Name: index_trips_on_vehicle_id; Type: INDEX; Schema: public; Owner: -
+-- Name: index_trips_on_vehicle_id; Type: INDEX; Schema: public; Owner: eco_ride
 --
 
 CREATE INDEX index_trips_on_vehicle_id ON public.trips USING btree (vehicle_id);
 
 
 --
--- Name: index_users_on_email; Type: INDEX; Schema: public; Owner: -
+-- Name: index_users_on_email; Type: INDEX; Schema: public; Owner: eco_ride
 --
 
 CREATE UNIQUE INDEX index_users_on_email ON public.users USING btree (email);
 
 
 --
--- Name: index_users_on_reset_password_token; Type: INDEX; Schema: public; Owner: -
+-- Name: index_users_on_reset_password_token; Type: INDEX; Schema: public; Owner: eco_ride
 --
 
 CREATE UNIQUE INDEX index_users_on_reset_password_token ON public.users USING btree (reset_password_token);
 
 
 --
--- Name: index_vehicles_on_user_id; Type: INDEX; Schema: public; Owner: -
+-- Name: index_vehicles_on_user_id; Type: INDEX; Schema: public; Owner: eco_ride
 --
 
 CREATE INDEX index_vehicles_on_user_id ON public.vehicles USING btree (user_id);
 
 
 --
--- Name: trips fk_rails_272ac73176; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: trips fk_rails_272ac73176; Type: FK CONSTRAINT; Schema: public; Owner: eco_ride
 --
 
 ALTER TABLE ONLY public.trips
@@ -327,7 +350,7 @@ ALTER TABLE ONLY public.trips
 
 
 --
--- Name: passenger_bookings fk_rails_89941f4230; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: passenger_bookings fk_rails_89941f4230; Type: FK CONSTRAINT; Schema: public; Owner: eco_ride
 --
 
 ALTER TABLE ONLY public.passenger_bookings
@@ -335,7 +358,7 @@ ALTER TABLE ONLY public.passenger_bookings
 
 
 --
--- Name: vehicles fk_rails_9e34682d54; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: vehicles fk_rails_9e34682d54; Type: FK CONSTRAINT; Schema: public; Owner: eco_ride
 --
 
 ALTER TABLE ONLY public.vehicles
@@ -343,7 +366,7 @@ ALTER TABLE ONLY public.vehicles
 
 
 --
--- Name: trips fk_rails_e7560abc33; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: trips fk_rails_e7560abc33; Type: FK CONSTRAINT; Schema: public; Owner: eco_ride
 --
 
 ALTER TABLE ONLY public.trips
@@ -351,7 +374,7 @@ ALTER TABLE ONLY public.trips
 
 
 --
--- Name: passenger_bookings fk_rails_feaed086d0; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: passenger_bookings fk_rails_feaed086d0; Type: FK CONSTRAINT; Schema: public; Owner: eco_ride
 --
 
 ALTER TABLE ONLY public.passenger_bookings
@@ -362,5 +385,5 @@ ALTER TABLE ONLY public.passenger_bookings
 -- PostgreSQL database dump complete
 --
 
-\unrestrict hExZ8DMWnM33aasI6LlsHSFFh05Hs5FdTBi14tSoCeSrFYrrxNnCB6IdnHeYvhP
+\unrestrict xjaBmIE9lfXm8tMx7hCSlzDzjcQRlTnoBU4nfc6u4h1c0QeaUgAar4oO2F4SFgs
 

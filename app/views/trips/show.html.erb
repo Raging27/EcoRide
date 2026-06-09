@@ -68,6 +68,21 @@
     <% end %>
   </div>
 
+  <!-- Driver Preferences Card -->
+  <div class="card shadow-sm mb-4">
+    <div class="card-header text-white" style="background: linear-gradient(to right, rgb(118, 150, 86), rgb(139, 69, 19));">
+      <h4 class="mb-0">Préférences du conducteur</h4>
+    </div>
+    <div class="card-body">
+      <p><strong>Pseudo :</strong> <%= @trip.driver.pseudo %></p>
+      <p><strong>Fumeurs acceptés :</strong> <%= @trip.driver.smoker? ? "Oui" : "Non" %></p>
+      <p><strong>Animaux acceptés :</strong> <%= @trip.driver.animal? ? "Oui" : "Non" %></p>
+      <% if @trip.driver.custom_preferences.present? %>
+        <p><strong>Préférences personnalisées :</strong> <%= @trip.driver.custom_preferences %></p>
+      <% end %>
+    </div>
+  </div>
+
   <!-- Reviews Section -->
   <div class="card shadow-sm mb-4">
     <div class="card-header text-white" style="background: linear-gradient(to right, rgb(118, 150, 86), rgb(139, 69, 19));">

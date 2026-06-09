@@ -49,11 +49,16 @@ class DashboardController < ApplicationController
   private
 
   def user_dashboard_params
-    # For security reasons, we’re not allowing direct changes to the role via the dashboard.
-    params.require(:user).permit(
+    permitted = params.require(:user).permit(
+      :role, :smoker, :animal, :custom_preferences,
       vehicles_attributes: [
-        :id, :plate_number, :date_first_registration, :brand, :model, :color, :default_seats, :_destroy
+        :id, :plate_number, :date_first_registration, :brand, :model, :color, :_destroy
       ]
     )
+    # Guard: users may only self-select functional roles, never privilege roles.
+    if permitted[:role].present? && !%w[driver passenger both].include?(permitted[:role])
+      permitted.delete(:role)
+    end
+    permitted
   end
 end
