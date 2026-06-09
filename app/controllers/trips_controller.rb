@@ -4,7 +4,15 @@ class TripsController < ApplicationController
 
   # GET /trips
   def index
-    @trips = Trip.all
+    if current_user.role.in?(["driver", "both"])
+      base = Trip.where(driver: current_user).order(start_time: :asc)
+    else
+      base = Trip.where(status: "planned")
+                 .where("seats_available >= 1")
+                 .where("start_time > ?", Time.current)
+                 .order(start_time: :asc)
+    end
+    @trips = base
 
     if params[:start_city].present?
       @trips = @trips.where("start_city ILIKE ?", "%#{params[:start_city]}%")
@@ -152,7 +160,15 @@ class TripsController < ApplicationController
   end
 
   def filter
-    @trips = Trip.all
+    if current_user.role.in?(["driver", "both"])
+      base = Trip.where(driver: current_user).order(start_time: :asc)
+    else
+      base = Trip.where(status: "planned")
+                 .where("seats_available >= 1")
+                 .where("start_time > ?", Time.current)
+                 .order(start_time: :asc)
+    end
+    @trips = base
 
     if params[:start_city].present?
       @trips = @trips.where("start_city ILIKE ?", "%#{params[:start_city]}%")
@@ -180,7 +196,8 @@ class TripsController < ApplicationController
     end
 
     render json: @trips.as_json(
-      only: [ :id, :start_city, :end_city, :price, :seats_available, :start_time, :driver_id ]
+      only: [ :id, :start_city, :end_city, :price, :seats_available, :start_time, :driver_id, :status ],
+      include: { driver: { only: [:pseudo] } }
     )
   end
 

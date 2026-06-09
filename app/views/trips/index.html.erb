@@ -20,13 +20,13 @@
       <input type="number" id="max_price" class="form-control filter-input" step="1">
     </div>
     <div class="col-md-1">
-      <label for="eco_friendly" class="form-label">Eco</label>
+      <label for="eco_friendly" class="form-label">Véhicule écologique</label>
       <div class="form-check">
         <input type="checkbox" id="eco_friendly" class="form-check-input filter-input">
       </div>
     </div>
     <div class="col-md-1">
-      <label for="max_duration" class="form-label">Durée max</label>
+      <label for="max_duration" class="form-label">Durée max (min)</label>
       <input type="number" id="max_duration" class="form-control filter-input" step="1">
     </div>
   </div>
@@ -39,11 +39,13 @@
             <h5 class="card-title"><%= trip.start_city %> → <%= trip.end_city %></h5>
             <p class="card-text">
               <strong>Prix :</strong> <%= number_to_currency(trip.price) %><br>
-              <strong>Places Disponibles :</strong> <%= trip.seats_available %><br>
-              <strong>Départ :</strong> <%= trip.start_time.strftime("%d/%m/%Y %H:%M") %>
+              <strong>Places disponibles :</strong> <%= trip.seats_available %><br>
+              <strong>Départ :</strong> <%= trip.start_time.strftime("%d/%m/%Y %H:%M") %><br>
+              <strong>Conducteur :</strong> <%= trip.driver.pseudo %><br>
+              <strong>Statut :</strong> <%= trip_status_badge(trip.status) %>
             </p>
             <div class="d-flex justify-content-between">
-              <%= link_to "Voir les détails", trip_path(trip), class: "btn btn-primary" %>
+              <%= link_to "Voir les détails", trip_path(trip), class: "btn btn-success" %>
               <% if trip.driver === current_user %>
                 <%= link_to "Supprimer", trip_path(trip), data: {turbo_method: :delete, turbo_confirm: "Êtes-vous sûr de vouloir supprimer ce trajet ?"}, class: "btn btn-danger" %>
               <% end %>
@@ -91,6 +93,17 @@
              date.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' });
     }
 
+    // Status badge helper (mirrors trips_helper.rb TRIP_STATUS_LABELS)
+    function tripStatusBadge(status) {
+      const map = {
+        planned:     { label: 'Planifié',  css: 'bg-success' },
+        in_progress: { label: 'En cours',  css: 'bg-warning text-dark' },
+        finished:    { label: 'Terminé',   css: 'bg-secondary' }
+      };
+      const cfg = map[status] || { label: status, css: 'bg-light text-dark' };
+      return `<span class="badge ${cfg.css}">${cfg.label}</span>`;
+    }
+
     // Function to render a single trip card
     function renderTripCard(trip) {
       let deletebtn = '';
@@ -104,11 +117,13 @@
               <h5 class="card-title">${trip.start_city} → ${trip.end_city}</h5>
               <p class="card-text">
                 <strong>Prix :</strong> ${Number(trip.price).toFixed(2).replace('.', ',')} €<br>
-                <strong>Places Disponibles :</strong> ${trip.seats_available}<br>
-                <strong>Départ :</strong> ${formatDate(trip.start_time)}
+                <strong>Places disponibles :</strong> ${trip.seats_available}<br>
+                <strong>Départ :</strong> ${formatDate(trip.start_time)}<br>
+                <strong>Conducteur :</strong> ${trip.driver?.pseudo ?? ''}<br>
+                <strong>Statut :</strong> ${tripStatusBadge(trip.status)}
               </p>
               <div class="d-flex justify-content-between">
-                <a href="/trips/${trip.id}" class="btn btn-primary">Voir les détails</a>
+                <a href="/trips/${trip.id}" class="btn btn-success">Voir les détails</a>
                 ${deletebtn}
               </div>
             </div>
