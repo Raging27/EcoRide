@@ -23,6 +23,20 @@ class User < ApplicationRecord
     Trip.where(id: passenger_bookings.pluck(:trip_id))
   end
 
+  def active_for_authentication?
+    super && !suspended? && !suppressed?
+  end
+
+  def inactive_message
+    if suppressed?
+      :suppressed
+    elsif suspended?
+      :suspended
+    else
+      super
+    end
+  end
+
   private
 
   def password_required?
