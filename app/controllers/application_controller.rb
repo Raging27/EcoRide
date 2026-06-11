@@ -4,7 +4,7 @@ class ApplicationController < ActionController::Base
   protected
 
   def configure_permitted_parameters
-    devise_parameter_sanitizer.permit(:sign_up, keys: [ :pseudo, :role ])
+    devise_parameter_sanitizer.permit(:sign_up, keys: [ :pseudo, :role, :terms_accepted ])
     devise_parameter_sanitizer.permit(:account_update, keys: [ :pseudo, :role ])
   end
   allow_browser versions: :modern

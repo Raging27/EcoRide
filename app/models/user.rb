@@ -16,6 +16,7 @@ class User < ApplicationRecord
   validates :credits, numericality: { greater_than_or_equal_to: 0 }
   validates :role, inclusion: { in: %w[driver passenger both employee admin],
     message: "doit être 'driver', 'passenger', 'both', 'employee' ou 'admin'" }
+  validates :terms_accepted, acceptance: true, on: :create
 
   validate :password_complexity, if: :password_required?
 

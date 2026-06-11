@@ -34,6 +34,13 @@
     <%= f.password_field :password_confirmation, class: "form-control" %>
   </div>
 
+  <div class="mb-3 form-check">
+    <%= f.check_box :terms_accepted, class: "form-check-input", required: true %>
+    <%= f.label :terms_accepted, class: "form-check-label" do %>
+      J'accepte les <a href="<%= mentions_legales_path %>" target="_blank" rel="noopener">CGU et la politique de confidentialité</a>
+    <% end %>
+  </div>
+
   <div class="mb-3">
     <%= f.submit "S'inscrire", class: "btn btn-primary" %>
   </div>
