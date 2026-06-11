@@ -10,6 +10,7 @@ admin = User.find_or_create_by!(email: "admin@example.com") do |user|
   user.credits               = 20
   user.role                  = "admin"
   user.is_chauffeur          = false
+  user.terms_accepted        = true
 end
 
 User.find_or_create_by!(email: "employee@example.com") do |user|
@@ -19,6 +20,7 @@ User.find_or_create_by!(email: "employee@example.com") do |user|
   user.credits               = 20
   user.role                  = "employee"
   user.is_chauffeur          = false
+  user.terms_accepted        = true
 end
 
 driver = User.find_or_create_by!(email: "user1@example.com") do |user|
@@ -28,6 +30,7 @@ driver = User.find_or_create_by!(email: "user1@example.com") do |user|
   user.credits               = 20
   user.role                  = "driver"
   user.is_chauffeur          = false
+  user.terms_accepted        = true
 end
 
 passenger = User.find_or_create_by!(email: "user2@example.com") do |user|
@@ -37,6 +40,7 @@ passenger = User.find_or_create_by!(email: "user2@example.com") do |user|
   user.credits               = 20
   user.role                  = "passenger"
   user.is_chauffeur          = false
+  user.terms_accepted        = true
 end
 
 driver2 = User.find_or_create_by!(email: "camille.laurent@example.com") do |user|
@@ -46,6 +50,7 @@ driver2 = User.find_or_create_by!(email: "camille.laurent@example.com") do |user
   user.credits               = 20
   user.role                  = "driver"
   user.is_chauffeur          = false
+  user.terms_accepted        = true
 end
 
 driver3 = User.find_or_create_by!(email: "julien.moreau@example.com") do |user|
@@ -55,6 +60,7 @@ driver3 = User.find_or_create_by!(email: "julien.moreau@example.com") do |user|
   user.credits               = 20
   user.role                  = "driver"
   user.is_chauffeur          = false
+  user.terms_accepted        = true
 end
 
 passenger2 = User.find_or_create_by!(email: "sophie.dubois@example.com") do |user|
@@ -64,6 +70,7 @@ passenger2 = User.find_or_create_by!(email: "sophie.dubois@example.com") do |use
   user.credits               = 20
   user.role                  = "passenger"
   user.is_chauffeur          = false
+  user.terms_accepted        = true
 end
 
 puts "   Users: #{User.count}"
