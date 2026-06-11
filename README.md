@@ -7,15 +7,28 @@
 Plateforme de covoiturage écologique avec gestion de trajets et crédits utilisateurs.
 
 ## Table des matières
+- [Démo en ligne](#-démo-en-ligne)
 - [Prérequis](#prérequis)
 - [Run with Docker](#run-with-docker)
 - [Installation locale](#installation-locale)
 - [Base de données](#base-de-données)
 - [Démarrage](#démarrage)
 - [Bonnes pratiques Git](#bonnes-pratiques-git)
-- [Identifiants de test](#identifiants-de-test)
 - [Contribuer](#contribuer)
 - [Licence](#licence)
+
+## 🚀 Démo en ligne
+
+**Application déployée :** https://ecoride-production-f1b6.up.railway.app/
+
+### Comptes de démonstration
+
+| Rôle | Email | Mot de passe |
+|------|-------|--------------|
+| Administrateur | admin@example.com | Password123@ |
+| Employé (modération) | employee@example.com | Password123@ |
+| Conducteur | user1@example.com | Password123@ |
+| Passager | user2@example.com | Password123@ |
 
 ## Prérequis
 
@@ -90,15 +103,6 @@ Processus :
 2. Faire des commits atomiques : `git commit -m "feat: ajout fonctionnalité X"`
 3. Ouvrir une Pull Request vers `develop`
 4. Après validation : merge dans `develop`, puis `develop` → `main` pour la production
-
-## Identifiants de test
-
-| Rôle       | Email                 | Mot de passe |
-|------------|-----------------------|--------------|
-| Admin      | admin@example.com     | Password123@ |
-| Employé    | employee@example.com  | Password123@ |
-| Conducteur | user1@example.com     | Password123@ |
-| Passager   | user2@example.com     | Password123@ |
 
 ## Contribuer
 
