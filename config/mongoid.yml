@@ -288,6 +288,7 @@ development:
 test:
   clients:
     default:
+      uri: "<%= ENV['MONGODB_URI'] %>"
       options:
         read:
           mode: :primary
